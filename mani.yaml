@@ -1,0 +1,42 @@
+projects:
+  glamdring:
+    path: glamdring
+    url: git@github.oz:jfredett/glamdring.git
+    desc: Glamdring, a weapon fit for a wizard
+    tags: [home-manager, modules, packages, nix]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/glamdring.git
+
+  laurelin:
+    path: laurelin
+    url: git@github.oz:jfredett/laurelin.git
+    desc: A Golden Tree
+    tags: [nixos, modules, packages, nix]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/laurelin.git
+  menta:
+    path: menta
+    url: git@github.oz:jfredett/menta.git
+    desc: Send a Message
+    tags: [nix, operations, scripts, tool]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/menta.git
+  narya:
+    path: narya
+    url: git@github.oz:jfredett/narya.git
+    desc: Keep it secret, keep it safe.
+    tags: [home-manager, modules, packages, nix, private]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/narya.git
+  telperion:
+    path: telperion
+    url: git@github.oz:jfredett/telperion.git
+    desc: A Silver Tree
+    tags: [nixos-configurations, nix, homelab]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/telperion.git
