@@ -16,14 +16,16 @@ projects:
     sync: true
     remote:
       origin: git@github.oz:jfredett/laurelin.git
-  menta:
-    path: menta
-    url: git@github.oz:jfredett/menta.git
+
+  elenta:
+    path: elenta
+    url: git@github.oz:jfredett/elenta.git
     desc: Send a Message
     tags: [nix, operations, scripts, tool]
     sync: true
     remote:
       origin: git@github.oz:jfredett/menta.git
+
   narya:
     path: narya
     url: git@github.oz:jfredett/narya.git
@@ -32,6 +34,7 @@ projects:
     sync: true
     remote:
       origin: git@github.oz:jfredett/narya.git
+
   telperion:
     path: telperion
     url: git@github.oz:jfredett/telperion.git
@@ -40,3 +43,20 @@ projects:
     sync: true
     remote:
       origin: git@github.oz:jfredett/telperion.git
+
+  turnkey:
+    path: turnkey
+    url: git@github.oz:jfredett/turnkey.git
+    desc: A secret management system based on Hashicorp Vault, systemd, and Nix.
+    tags: [nixos, vault, operations, security]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/turnkey.git
+
+  # Temporary while I migrate
+  ereshkigal:
+    path: ereshkigal
+    url: git@github.oz:jfredett/ereshkigal.git
+    desc: Ereshkigal
+    tags: [legacy]
+    sync: true
