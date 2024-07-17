@@ -14,6 +14,42 @@
 
     flake-utils.url = "github:numtide/flake-utils";
     devenv.url = "github:cachix/devenv";
+
+    narya = {
+      url = "git+file:./narya";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    elenta = {
+      url = "git+file:./elenta";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    glamdring = {
+      url = "git+file:./glamdring";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    laurelin = {
+      url = "git+file:./laurelin";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    telperion = {
+      url = "git+file:./telperion";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        laurelin.follows = "laurelin";
+      };
+    };
   };
 
   outputs = { self, nixpkgs, devenv, flake-utils, nixos-generators, nix-index-database, ... } @ inputs: let
@@ -29,6 +65,7 @@
           packages = with pkgs; [
             mani
             git
+            just
           ];
         }];
       };
