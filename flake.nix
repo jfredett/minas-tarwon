@@ -9,14 +9,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-index-database.url = "github:Mic92/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    flake-utils.url = "github:numtide/flake-utils";
-    devenv.url = "github:cachix/devenv";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
 
-    narya = {
-      url = "git+file:./narya";
+    devenv = {
+      url = "github:cachix/devenv";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -29,15 +32,22 @@
       };
     };
 
-    glamdring = {
-      url = "git+file:./glamdring";
+    laurelin = {
+      url = "git+file:./laurelin";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
     };
 
-    laurelin = {
-      url = "git+file:./laurelin";
+    narya = {
+      url = "git+file:./narya";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    glamdring = {
+      url = "git+file:./glamdring";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
