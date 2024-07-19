@@ -35,7 +35,9 @@
         "cachix": "cachix",
         "flake-compat": "flake-compat_2",
         "nix": "nix_2",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
@@ -485,10 +487,10 @@
         ]
       },
       "locked": {
-        "dirtyRev": "2c7284f67a9278480023b34001967886554929ae-dirty",
-        "dirtyShortRev": "2c7284f-dirty",
-        "lastModified": 1720912064,
-        "narHash": "sha256-klXFIFYxXLggrWZ+woqHJ0qS3lWIPNcentq4pzpP4kI=",
+        "dirtyRev": "c610a64aef43cdfb273d0b54f44a502a3a631894-dirty",
+        "dirtyShortRev": "c610a64-dirty",
+        "lastModified": 1721315186,
+        "narHash": "sha256-TPSaI8A0dskaADQbDUwl+SkBiS7Vbf71puEw2bcSUlA=",
         "type": "git",
         "url": "file:./laurelin"
       },
@@ -759,22 +761,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1713361204,
-        "narHash": "sha256-TA6EDunWTkc5FvDCqU3W2T3SFn0gRZqh6D/hJnM02MM=",
-        "owner": "cachix",
-        "repo": "devenv-nixpkgs",
-        "rev": "285676e87ad9f0ca23d8714a6ab61e7e027020c6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cachix",
-        "ref": "rolling",
-        "repo": "devenv-nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1719075281,
         "narHash": "sha256-CyyxvOwFf12I91PBWz43iGT1kjsf5oi6ax7CrvaMyAo=",
         "owner": "NixOS",
@@ -789,13 +775,13 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_3": {
       "locked": {
-        "lastModified": 1720957393,
-        "narHash": "sha256-oedh2RwpjEa+TNxhg5Je9Ch6d3W1NKi7DbRO1ziHemA=",
+        "lastModified": 1721138476,
+        "narHash": "sha256-+W5eZOhhemLQxelojLxETfbFbc19NWawsXBlapYpqIA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "693bc46d169f5af9c992095736e82c3488bf7dbb",
+        "rev": "ad0b5eed1b6031efaed382844806550c3dcb4206",
         "type": "github"
       },
       "original": {
@@ -813,7 +799,7 @@
         "git-hooks": "git-hooks",
         "home-manager": "home-manager_2",
         "nix-darwin": "nix-darwin_2",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -909,7 +895,7 @@
         "narya": "narya",
         "nix-index-database": "nix-index-database",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_3",
         "telperion": "telperion"
       }
     },
@@ -999,10 +985,10 @@
         ]
       },
       "locked": {
-        "dirtyRev": "3e8261b2b5eaae60f1643e5260f63f5aeb1866e7-dirty",
-        "dirtyShortRev": "3e8261b-dirty",
-        "lastModified": 1721188895,
-        "narHash": "sha256-gDG8OEw7D+d6Kt34ArzCRH68VrrBAupS6/k7LhQkUKg=",
+        "dirtyRev": "30a6a5aec2a8edf008adeff487cf0badf01f568a-dirty",
+        "dirtyShortRev": "30a6a5a-dirty",
+        "lastModified": 1721399452,
+        "narHash": "sha256-H92aszg/K8aFB+nkrOm7PWRchNyDlREy66T5koKcLdQ=",
         "type": "git",
         "url": "file:./telperion"
       },

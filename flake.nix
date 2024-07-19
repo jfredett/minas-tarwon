@@ -62,7 +62,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, devenv, flake-utils, nixos-generators, nix-index-database, ... } @ inputs: let
+  outputs = { self, nixpkgs, devenv, flake-utils, nixos-generators, nix-index-database, telperion, ... } @ inputs: let
     systems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     forAllSystems = f: builtins.listToAttrs (map (name: { inherit name; value = f name; }) systems);
   in {
@@ -80,5 +80,9 @@
         }];
       };
     });
+
+    dns = telperion.dns;
   };
+
+
 }
