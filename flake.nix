@@ -58,6 +58,8 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         laurelin.follows = "laurelin";
+        narya.follows = "narya";
+        glamdring.follows = "glamdring";
       };
     };
   };

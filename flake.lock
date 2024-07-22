@@ -41,11 +41,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1721213664,
-        "narHash": "sha256-OqQr3ulhVGCBjW7g1DXaI3wB9YtVVUb4cyaQMAJ/2NQ=",
+        "lastModified": 1721650703,
+        "narHash": "sha256-GNPOqEGUd+AMiR84AD7yiPFQd/c/6K1URkBx9SL8dbk=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "1d848fc26376d919458482fa0b4d0e240285a93f",
+        "rev": "6450828d038d743e97e2e7ff567ce5fa9f17a224",
         "type": "github"
       },
       "original": {
@@ -424,10 +424,11 @@
         "nur": "nur"
       },
       "locked": {
-        "dirtyRev": "d42705d0db6c2a7994f4ed2c0ed4061ec8451b9b-dirty",
-        "dirtyShortRev": "d42705d-dirty",
-        "lastModified": 1721144685,
-        "narHash": "sha256-jTQBlaYb9WlpZ3I48rkfScgEhG0KcI76LZTt8UZWl7o=",
+        "lastModified": 1721616097,
+        "narHash": "sha256-JqQ6FBzMtGFBrGXqVxRJAaThjP0wuda9hSFIpcMS5SY=",
+        "ref": "refs/heads/main",
+        "rev": "46627cdd864cccae3b2c4074733ae35cfde65e22",
+        "revCount": 87,
         "type": "git",
         "url": "file:./glamdring"
       },
@@ -487,10 +488,10 @@
         ]
       },
       "locked": {
-        "dirtyRev": "c610a64aef43cdfb273d0b54f44a502a3a631894-dirty",
-        "dirtyShortRev": "c610a64-dirty",
-        "lastModified": 1721315186,
-        "narHash": "sha256-TPSaI8A0dskaADQbDUwl+SkBiS7Vbf71puEw2bcSUlA=",
+        "dirtyRev": "ea1b65211155aa26c65c69e038aa6940e723a1cc-dirty",
+        "dirtyShortRev": "ea1b652-dirty",
+        "lastModified": 1721661993,
+        "narHash": "sha256-KrLthY7smMZBx1KDYrkmZWPebe0W24WJYtLYDOm782A=",
         "type": "git",
         "url": "file:./laurelin"
       },
@@ -506,11 +507,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1720912064,
-        "narHash": "sha256-CDruVJTnIId3UJWMHcZEyf7+QZz7XZwZBO7nR4ep1bg=",
-        "ref": "refs/heads/main",
-        "rev": "fad2867625ab4fff4533dc8ff21dcd088c1367a8",
-        "revCount": 3,
+        "dirtyRev": "ec640cf3e707e48e9b9a5ecd9008023c83c1c991-dirty",
+        "dirtyShortRev": "ec640cf-dirty",
+        "lastModified": 1721662329,
+        "narHash": "sha256-dQE8rd1FlAhd915aMFYhOpY6GHanowEULyrRf9KQF1g=",
         "type": "git",
         "url": "file:./narya"
       },
@@ -619,11 +619,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1720926593,
-        "narHash": "sha256-fW6e27L6qY6s+TxInwrS2EXZZfhMAlaNqT0sWS49qMA=",
+        "lastModified": 1721531260,
+        "narHash": "sha256-O72uxk4gYFQDwNkoBioyrR3GK9EReZmexCStBaORMW8=",
         "owner": "Mic92",
         "repo": "nix-index-database",
-        "rev": "5fe5b0cdf1268112dc96319388819b46dc051ef4",
+        "rev": "b6db9fd8dc59bb2ccb403f76d16ba8bbc1d5263d",
         "type": "github"
       },
       "original": {
@@ -777,11 +777,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1721138476,
-        "narHash": "sha256-+W5eZOhhemLQxelojLxETfbFbc19NWawsXBlapYpqIA=",
+        "lastModified": 1721379653,
+        "narHash": "sha256-8MUgifkJ7lkZs3u99UDZMB4kbOxvMEXQZ31FO3SopZ0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ad0b5eed1b6031efaed382844806550c3dcb4206",
+        "rev": "1d9c2c9b3e71b9ee663d11c5d298727dace8d374",
         "type": "github"
       },
       "original": {
@@ -977,18 +977,24 @@
     "telperion": {
       "inputs": {
         "dns": "dns",
+        "glamdring": [
+          "glamdring"
+        ],
         "laurelin": [
           "laurelin"
+        ],
+        "narya": [
+          "narya"
         ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "dirtyRev": "30a6a5aec2a8edf008adeff487cf0badf01f568a-dirty",
-        "dirtyShortRev": "30a6a5a-dirty",
-        "lastModified": 1721399452,
-        "narHash": "sha256-H92aszg/K8aFB+nkrOm7PWRchNyDlREy66T5koKcLdQ=",
+        "dirtyRev": "ec77c432a6d2980634f00d6e7ad68b62db75f12f-dirty",
+        "dirtyShortRev": "ec77c43-dirty",
+        "lastModified": 1721615859,
+        "narHash": "sha256-7VVVNMjtgprydRsPv1h8ghJLftJsx6TS2ADtsd6QB60=",
         "type": "git",
         "url": "file:./telperion"
       },
