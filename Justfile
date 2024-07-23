@@ -11,10 +11,10 @@ local-update:
   just update-input telperion
 
 show-dns ZONE: local-update
-  nix eval --impure '.#dns.zones.{{ZONE}}' | xargs printf
+  nix eval --impure '.#dns.zones."{{ZONE}}"' | xargs printf
 
 show-hosts ZONE: local-update
-  nix eval --impure '.#dns.hosts.{{ZONE}}' | xargs printf
+  nix eval --impure '.#dns.hosts."{{ZONE}}"' | xargs printf
 
 update-input INPUT: 
   nix flake lock --update-input {{INPUT}}
