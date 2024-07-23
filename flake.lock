@@ -488,10 +488,11 @@
         ]
       },
       "locked": {
-        "dirtyRev": "ea1b65211155aa26c65c69e038aa6940e723a1cc-dirty",
-        "dirtyShortRev": "ea1b652-dirty",
-        "lastModified": 1721661993,
+        "lastModified": 1721664356,
         "narHash": "sha256-KrLthY7smMZBx1KDYrkmZWPebe0W24WJYtLYDOm782A=",
+        "ref": "refs/heads/main",
+        "rev": "941f4472bcebb7ff1e9524c43c68745ccb428c2c",
+        "revCount": 11,
         "type": "git",
         "url": "file:./laurelin"
       },
@@ -507,10 +508,10 @@
         ]
       },
       "locked": {
-        "dirtyRev": "ec640cf3e707e48e9b9a5ecd9008023c83c1c991-dirty",
-        "dirtyShortRev": "ec640cf-dirty",
-        "lastModified": 1721662329,
-        "narHash": "sha256-dQE8rd1FlAhd915aMFYhOpY6GHanowEULyrRf9KQF1g=",
+        "dirtyRev": "0169a45593058b9d2b5965c0b6ff70c7e3b97008-dirty",
+        "dirtyShortRev": "0169a45-dirty",
+        "lastModified": 1721665109,
+        "narHash": "sha256-v/ha8l/HHR1i1F1L3RJ/fPBnG/DvzbNAE8Spom3GMGU=",
         "type": "git",
         "url": "file:./narya"
       },
@@ -777,11 +778,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1721379653,
-        "narHash": "sha256-8MUgifkJ7lkZs3u99UDZMB4kbOxvMEXQZ31FO3SopZ0=",
+        "lastModified": 1721562059,
+        "narHash": "sha256-Tybxt65eyOARf285hMHIJ2uul8SULjFZbT9ZaEeUnP8=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1d9c2c9b3e71b9ee663d11c5d298727dace8d374",
+        "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
         "type": "github"
       },
       "original": {
@@ -991,10 +992,10 @@
         ]
       },
       "locked": {
-        "dirtyRev": "ec77c432a6d2980634f00d6e7ad68b62db75f12f-dirty",
-        "dirtyShortRev": "ec77c43-dirty",
-        "lastModified": 1721615859,
-        "narHash": "sha256-7VVVNMjtgprydRsPv1h8ghJLftJsx6TS2ADtsd6QB60=",
+        "dirtyRev": "91dddf51800d1a6df31d5355265da23e91ecc90e-dirty",
+        "dirtyShortRev": "91dddf5-dirty",
+        "lastModified": 1721665335,
+        "narHash": "sha256-vcEF6rkShScWAwpgqgKdCn+PnGEBlay+vSX2ghMjuc4=",
         "type": "git",
         "url": "file:./telperion"
       },
