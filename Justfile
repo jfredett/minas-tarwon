@@ -1,9 +1,10 @@
 set dotenv-load
 
 update:
-  nix flake update
+  nix flake --no-warn-dirty update
 
-local-update:
+@local-update:
+  echo "$(tput bold)Updating local flakes$(tput sgr0)"
   just update-input elenta
   just update-input narya
   just update-input glamdring
@@ -11,14 +12,15 @@ local-update:
   just update-input telperion
 
 show-dns ZONE: local-update
-  nix eval --impure '.#dns.zones."{{ZONE}}"' | xargs printf
+  nix eval --no-warn-dirty --impure '.#dns.zones."{{ZONE}}"' | xargs printf
 
 show-hosts ZONE: local-update
-  nix eval --impure '.#dns.hosts."{{ZONE}}"' | xargs printf
+  nix eval --no-warn-dirty --impure '.#dns.hosts."{{ZONE}}"' | xargs printf
 
-update-input INPUT: 
-  nix flake lock --update-input {{INPUT}}
-  nix flake update {{INPUT}}/
+@update-input INPUT:
+  echo "$(tput bold)-> Updating {{INPUT}}$(tput sgr0)"
+  nix flake lock --no-warn-dirty --update-input {{INPUT}}
+  nix flake update --no-warn-dirty {{INPUT}}/
 
 deploy TASK MACHINE: update local-update
   nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
