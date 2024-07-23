@@ -18,6 +18,7 @@ show-hosts ZONE: local-update
 
 update-input INPUT: 
   nix flake lock --update-input {{INPUT}}
+  nix flake update {{INPUT}}/
 
 deploy TASK MACHINE: update local-update
   nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
