@@ -40,3 +40,35 @@ deploy-local TASK CONFIG: update local-update
 deploy-ip TASK IP CONFIG: update local-update
   nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
     --target-host "{{IP}}" --flake "./telperion#{{CONFIG}}" {{TASK}}
+
+# TODO: Calculate the MAC from the Cadaster.
+[group('netboot')]
+build-img CONFIG MAC: update local-update
+  #!/usr/bin/env bash
+
+  # Prepare the directory
+  target_dir="$NETBOOT_DIR/{{MAC}}/{{CONFIG}}"
+
+  sudo mkdir -p "$target_dir"
+  sudo mkdir -p $TMPDIR
+  sudo rm -rf "$TMPDIR/{{MAC}}/{{CONFIG}}"
+
+
+  # Build the netboot image
+  nix build --impure "./telperion#nixosConfigurations.{{CONFIG}}.config.system.build.netboot" \
+    --no-link \
+    --log-format bar-with-logs \
+    --out-link $TMPDIR/{{MAC}}/{{CONFIG}}
+
+  # Shuffle images back
+  latest_creation_time=$(stat -c %z "$target_dir/latest")
+  timestamp=$(date -d "$latest_creation_time" +"%d-%b-%Y-%H%MET")
+
+  sudo mv "$target_dir/latest" "$target_dir/$timestamp"
+
+  just rsync "$TMPDIR/{{MAC}}/{{CONFIG}}/" "$target_dir/latest/"
+
+[group('utility')]
+rsync SOURCE TARGET:
+  sudo rsync -r --copy-links --info=progress2 --info=name0 -a "{{SOURCE}}" "{{TARGET}}"
+
