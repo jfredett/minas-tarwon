@@ -26,6 +26,9 @@ deploy TASK MACHINE: update local-update
   nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
     --target-host "{{MACHINE}}.canon" --flake "./telperion#{{MACHINE}}" {{TASK}}
 
+deploy-local TASK CONFIG: update local-update
+  sudo nixos-rebuild -j $PARALLEL --impure --upgrade --flake "./telperion#{{CONFIG}}" {{TASK}}
+
 deploy-ip TASK IP CONFIG: update local-update
   nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
     --target-host "{{IP}}" --flake "./telperion#{{CONFIG}}" {{TASK}}
