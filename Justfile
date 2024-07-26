@@ -1,12 +1,33 @@
 set dotenv-load
 
+[private]
 @default:
   just --list
 
+_diag:
+  echo {{env("NIX_PATH_INCLUDE")}}
+
 # Update all flakes
 [group('update')]
-update:
-  nix flake --no-warn-dirty update
+update: local-update remote-update
+
+# Update all flakes if the last update was more than 15 minutes ago 
+[group('update')]
+remote-update:
+  #!/usr/bin/env bash
+  echo "$(tput bold)Updating all flakes$(tput sgr0)"
+
+  if [ ! -f /tmp/last-update ]; then
+    touch /tmp/last-update
+  fi
+
+  if [ $(($(date +%s) - $(date -r /tmp/last-update +%s))) -gt 900 ]; then
+    echo "$(tput bold)-> Updating $(tput sgr0)"
+    nix flake update --no-warn-dirty
+    touch /tmp/last-update
+  else
+    echo "$(tput bold)-> Skipping update, last run was less than 15 minutes ago$(tput sgr0)"
+  fi
 
 # Update only the minas-tarwon affiliated flakes.
 [group('update')]
@@ -23,46 +44,57 @@ update:
 @update-input INPUT:
   echo "$(tput bold)-> Updating {{INPUT}}$(tput sgr0)"
   nix flake lock --no-warn-dirty --update-input {{INPUT}}
-  #nix flake update --no-warn-dirty {{INPUT}}/
+  nix flake update --no-warn-dirty {{INPUT}}/
 
 # Create a DNS Zonefile for all items in the cadaster, by their canonical IP.
 [group('show')]
-show-dns ZONE: local-update
+show-dns ZONE: update
   nix eval --no-warn-dirty --impure '.#dns.zones."{{ZONE}}"' | xargs printf
 
 # Create a hostsfile including all items in the cadaster, by their canonical IP.
 [group('show')]
-show-hosts ZONE: local-update
+show-hosts ZONE: update
   nix eval --no-warn-dirty --impure '.#dns.hosts."{{ZONE}}"' | xargs printf
 
 
 
 ### DEPLOY JOBS
 
-# Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{MACHINE}}
+_deploy ARGS: update
+  nixos-rebuild -j $PARALLEL -I $NIX_PATH_INCLUDE --impure --upgrade {{ARGS}}
+
+# Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{MACHINE}} via it's canonical
+# domain name
 [group('deploy')]
-deploy TASK MACHINE: update
-  nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
-    --target-host "{{MACHINE}}.canon" --flake ".#{{MACHINE}}" {{TASK}}
+deploy TASK MACHINE:
+  just deploy-to "{{MACHINE}}.canon" {{TASK}} {{MACHINE}}
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the local machine using the given {{CONFIG}}
 [group('deploy')]
-deploy-local TASK CONFIG: update
-  sudo nixos-rebuild -j $PARALLEL --impure --upgrade --flake ".#{{CONFIG}}" {{TASK}}
+deploy-local TASK CONFIG:
+  sudo just _deploy "--flake .#{{CONFIG}} {{TASK}}"
+#  sudo nixos-rebuild -j $PARALLEL --impure --upgrade --flake ".#{{CONFIG}}" {{TASK}}
 
-# Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{IP}}, applying the given {{CONFIG}}
+# Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{LOCATION}} (IP or DN), applying the given {{CONFIG}}
 [group('deploy')]
-deploy-ip TASK IP CONFIG: update
-  nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
-    --target-host "{{IP}}" --flake ".#{{CONFIG}}" {{TASK}}
+deploy-to LOCATION TASK CONFIG:
+  just _deploy "--use-remote-sudo --target-host {{LOCATION}} --flake .#{{CONFIG}} {{TASK}}"
+#  nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
+#    --target-host "{{LOCATION}}" --flake ".#{{CONFIG}}" {{TASK}}
 
-# Create and place a netbootable image in the netboot directory (specified in the flake)
+# Create and place a netbootable image in the netboot for the MACHINE specified in the CADASTER directory (specified in the flake)
 [group('deploy')]
-deploy-netboot CONFIG: update
+deploy-netboot MACHINE: update
   sudo nix run \
     --impure --no-warn-dirty \
     --log-format bar-with-logs \
-    ".#build-image.{{CONFIG}}"
+    ".#build-image.{{MACHINE}}"
+
+# Create a dry-build of the configuration specified by {{CONFIG}}
+[group('deploy')]
+dry-build CONFIG:
+  just deploy dry-build {{CONFIG}}
+  
 
 ### UTILITY
 
