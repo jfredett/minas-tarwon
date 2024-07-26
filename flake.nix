@@ -1,4 +1,6 @@
 {
+  # TODO: use flake-utils.lib.meld to merge everything?
+
   description = "Minas Tarwon";
 
   inputs = {
@@ -85,7 +87,49 @@
     });
 
     dns = telperion.dns;
+    nixosConfigurations = telperion.nixosConfigurations;
+
+    # TODO: Clean this up somehow, probably import the script from another dir?
+    apps = forAllSystems (system: let
+      pkgs = import nixpkgs { inherit system; };
+      netboot_dir = "/mnt/emerald_city_netboot";
+      tmpdir = "/storage/minas-tarwon";
+      mkScript = name: script: flake-utils.lib.mkApp {
+        drv = pkgs.writeScriptBin name script;
+      };
+      mkBuildScript = machine: configuration: let
+        config = configuration.config;
+      in (mkScript machine ''
+        set -e
+
+        mac=$(echo "${config.laurelin.mac}" | tr -d :)
+        target_dir=${netboot_dir}/$mac
+        tmpdir=${tmpdir}/${machine}
+
+        echo "Preparing necessary directories"
+        mkdir -p $target_dir
+
+        if [ -e $target_dir/latest ]; then
+          echo "Shuffling ${machine} images"
+          latest_creation_time=$(stat -c %Z "$target_dir/latest")
+          timestamp=$(date -d "@$latest_creation_time" +"%d-%b-%Y-%H%MET")
+          mv $target_dir/latest $target_dir/$timestamp
+        fi
+
+        echo "Build ${machine} image"
+        nix build --impure ".#nixosConfigurations.${machine}.config.system.build.netboot" \
+          --log-format bar-with-logs \
+          --out-link $tmpdir
+
+        echo "Copy ${machine} image to mount"
+        rsync -r --copy-links --info=progress2 --info=name0 -a $tmpdir/ $target_dir/latest
+
+        echo "Clean up"
+        rm -rf $tmpdir
+      '');
+    in {
+      # BUG: This seems to break `nix flake show`
+      build-image = builtins.mapAttrs (machine: config: mkBuildScript machine config) self.nixosConfigurations;
+    });
   };
-
-
 }

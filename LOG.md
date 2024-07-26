@@ -307,3 +307,61 @@ everything that touches my network, at least).
 
 I also updated NFS rules for nancy. This gets network storage back to functional.
 
+# 24-JUL-2024
+
+## 1445
+
+I set up canon IPs for both of the DRACs on the two R730s (DOP and BTG), but for whatever reason I
+can't get to them via the DNS address, only by their IP, not a big deal for now, but annoying.
+
+Archimedes is hooked back up to the barrier server, cleaned up some stuff in the `Justfile` and
+started in on the netboot image. I need to figure out what to include in the imports path (if
+anything), and then go from there.
+
+## 2248
+
+I think I want to rewrite a bunch of the image-building stuff.
+
+The script I have is very clunky, and I think I could pretty easily adapt the existing script in nix
+to just work with my setup directly, but I'd have to introduce a couple new ideas.
+
+In particular, There is a sort of 'hyperparameter' that I need to introduce, something that is
+specific to my setup, namely -- where I store the netboot images -- but which is not really a detail
+that fits in any of the existing flakes in the blizzard, so to speak.
+
+I suppose `minas-tarwon` is the natural place for such things, but I could also make an argument
+that much of what I plan to do in `elenta` is similar.
+
+I think, however, my idea has evolved somewhat. Where `elenta` was originally going to be the
+`flying-monkey` replacement, and sort of the operational arm of the thing (with `laurelin` being the
+abstract library from which `telperion` both describes the physical architecture (the 'cadaster',
+and also describes abstract configurations of that architecture ('domains'). I also had intended for
+`elenta` to manage mapping those `domains` onto the physical architecture.
+
+I think I'm going to purpose `elenta` solely towards that goal, and pull all the operational stuff
+into `minas-tarwon`, additionally, it can contain the 'hyperconfiguration' which can be passed into
+scripts and so on (but ideally isn't referred to in and of the other flakes). The first such element
+of the hyperconfiguration is the `minas-tarwon.netboot_store`, which is some structured
+configuration that referents will use to know where netboot images are stored, e.g.:
+
+```nix
+minas-tarwon.netboot_store = {
+    path = "/path/to/store";
+    # ...
+};
+```
+
+I'll try to encode as much of my scripting to nix, so it can natively refer to things, then wrap
+these outputs with a just script.
+
+# 25-JUL-2024
+
+## 2341
+
+Got dragon-of-perdition fixed up and booting. I also got all his interfaces bonded and running as
+one unit. I need to read about the other options, but they all look pretty straightforward.
+
+I also refactored the Justfile a bunch, and got netboot image creation moved into a flake 'app'.
+It mostly works, but is quite messy, so I'm going to think about some ways to clean it up.
+
+
