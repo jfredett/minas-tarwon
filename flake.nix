@@ -76,6 +76,7 @@
       default = devenv.lib.mkShell {
         inherit inputs pkgs;
         modules = [
+          #{ dotenv.enable = true; }
           { packages = with pkgs; [
               busybox
               mani
@@ -119,9 +120,10 @@
         fi
 
         echo "Build ${machine} image"
-        nix build --impure ".#nixosConfigurations.${machine}.config.system.build.netboot" \
+        nix build --impure \
           --log-format bar-with-logs \
-          --out-link $tmpdir
+          --out-link $tmpdir \
+          ".#nixosConfigurations.${machine}.config.system.build.netboot"
 
         echo "Copy ${machine} image to mount"
         rsync -r --copy-links --info=progress2 --info=name0 -a $tmpdir/ $target_dir/latest

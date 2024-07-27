@@ -383,4 +383,11 @@ config out. Ideally `cadaster` is really only the hardware configuration and stu
 building the base image. In the end all my machines will be a collection of `laurelin`, `glamdring`,
 and `narya` configuration, everything else gets split up.
 
+## 0042
+
+Fixed an issue where unfree packages weren't allowed and that meant 1pass couldn't build. However,
+that got me thinking that it'd be better to export `NIXPKGS_ALLOW_UNFREE`, since there is no reason
+to litter the codebase with unfree tags when I can just export a variable in the devshell once that
+I can turn off if I want to see if I'm using anything unfree.
+
 

@@ -41,11 +41,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1721817837,
-        "narHash": "sha256-vZYHahW5w9nMbDV0YFC+HE8bwjkDjJ2kauDQWKjRGtY=",
+        "lastModified": 1722019186,
+        "narHash": "sha256-w2r2VGZrh5pT6dNntlCKAlF7aFs5B3prLQKPNJCj8C0=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "44bfc26843694ab17ebae1d4922065e48d93f501",
+        "rev": "075c114280751f956335333179304d14ae01aedc",
         "type": "github"
       },
       "original": {
@@ -454,10 +454,10 @@
         "nur": "nur"
       },
       "locked": {
-        "dirtyRev": "3a5184472923ac99986902f5d76d0b404b036b06-dirty",
-        "dirtyShortRev": "3a51844-dirty",
-        "lastModified": 1721934806,
-        "narHash": "sha256-zcACO9TtL03RRrlop+Fy0pGaqxkvE0qbd7KqcGRrEOk=",
+        "dirtyRev": "560d7248b8717339a83e2a14bafa7f4ee56257c5-dirty",
+        "dirtyShortRev": "560d724-dirty",
+        "lastModified": 1722031639,
+        "narHash": "sha256-smChgQaVH8NB4sqwglZpy39Hf+7KGal/MjjNB0ULR40=",
         "type": "git",
         "url": "file:./glamdring"
       },
@@ -542,10 +542,10 @@
         "nur": "nur_2"
       },
       "locked": {
-        "dirtyRev": "e6af04208e2c8dbbddd65457286c8ccb85966022-dirty",
-        "dirtyShortRev": "e6af042-dirty",
-        "lastModified": 1721967623,
-        "narHash": "sha256-kB1P4F1UyB6RK8y9XSAFQleGuBldgvkGrHqHdF7JDn0=",
+        "dirtyRev": "590bbf81943b97643ee4553a9b3d7fe20f1aae01-dirty",
+        "dirtyShortRev": "590bbf8-dirty",
+        "lastModified": 1722057244,
+        "narHash": "sha256-+u3bjIp7lJ1mEwh/Zl8FTOX9cdW2ppCBj0t0GI1vyoM=",
         "type": "git",
         "url": "file:./laurelin"
       },
@@ -561,11 +561,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722012919,
-        "narHash": "sha256-X/cNuPSA3RHfxPSNl+bQcmlfC5dkQTha/BdyR8l+R1M=",
+        "lastModified": 1722054893,
+        "narHash": "sha256-m06eFZe/GGfkQDL94a9M+sFV6sk37uWWrue2bCxu6rg=",
         "ref": "refs/heads/main",
-        "rev": "4c2355a3b78bbd189f741836567c6885fa40368c",
-        "revCount": 10,
+        "rev": "12f464f249cf5d535c8da2a2d37b27f5c04b7c35",
+        "revCount": 11,
         "type": "git",
         "url": "file:./narya"
       },
@@ -832,22 +832,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1721743106,
-        "narHash": "sha256-adRZhFpBTnHiK3XIELA3IBaApz70HwCYfv7xNrHjebA=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "dc14ed91132ee3a26255d01d8fd0c1f5bff27b2f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1721924956,
         "narHash": "sha256-Sb1jlyRO+N8jBXEX9Pg9Z1Qb8Bw9QyOgLDNMEpmjZ2M=",
         "owner": "nixos",
@@ -870,16 +854,19 @@
         "git-hooks": "git-hooks",
         "home-manager": "home-manager_2",
         "nix-darwin": "nix-darwin_2",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": [
+          "glamdring",
+          "nixpkgs"
+        ],
         "nuschtosSearch": "nuschtosSearch",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1721946885,
-        "narHash": "sha256-b90iLj3d9tLz5/M8dDnhD5j9vAWjpoNn5WhCLnIwK/g=",
+        "lastModified": 1722016645,
+        "narHash": "sha256-YQA4oenJwjWVzX+we6Zzv08im5q2n7dVhJ12Nw8wQio=",
         "owner": "pta2002",
         "repo": "nixvim",
-        "rev": "47b6c4804f69556dc22aa2a2e64721f216b69090",
+        "rev": "162ae6354bbf2af5c33b09aa90e9d8d11f14462e",
         "type": "github"
       },
       "original": {
@@ -912,11 +899,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1722016195,
-        "narHash": "sha256-HwzjeK2aMYXn7X6pUfcuAd+fH90Ia+evhkT0ZODc+cU=",
+        "lastModified": 1722053067,
+        "narHash": "sha256-ZWcs+03fVtbYu5b1Q4V4nAGNpReYBcMlVt2esSwlS40=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "b51ebdb75573c51ddc621ba1bd3ea3488b2afc99",
+        "rev": "141e2444389e4a387d11768ee110ee5b67b8d1a1",
         "type": "github"
       },
       "original": {
@@ -927,11 +914,11 @@
     },
     "nur_2": {
       "locked": {
-        "lastModified": 1722016195,
-        "narHash": "sha256-HwzjeK2aMYXn7X6pUfcuAd+fH90Ia+evhkT0ZODc+cU=",
+        "lastModified": 1722053067,
+        "narHash": "sha256-ZWcs+03fVtbYu5b1Q4V4nAGNpReYBcMlVt2esSwlS40=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "b51ebdb75573c51ddc621ba1bd3ea3488b2afc99",
+        "rev": "141e2444389e4a387d11768ee110ee5b67b8d1a1",
         "type": "github"
       },
       "original": {
@@ -942,11 +929,11 @@
     },
     "nur_3": {
       "locked": {
-        "lastModified": 1722016195,
-        "narHash": "sha256-HwzjeK2aMYXn7X6pUfcuAd+fH90Ia+evhkT0ZODc+cU=",
+        "lastModified": 1722053067,
+        "narHash": "sha256-ZWcs+03fVtbYu5b1Q4V4nAGNpReYBcMlVt2esSwlS40=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "b51ebdb75573c51ddc621ba1bd3ea3488b2afc99",
+        "rev": "141e2444389e4a387d11768ee110ee5b67b8d1a1",
         "type": "github"
       },
       "original": {
@@ -1041,7 +1028,7 @@
         "narya": "narya",
         "nix-index-database": "nix-index-database",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "telperion": "telperion"
       }
     },
@@ -1139,10 +1126,10 @@
         "nur": "nur_3"
       },
       "locked": {
-        "dirtyRev": "10f813283e874ac87a152a2abf17d02581071bad-dirty",
-        "dirtyShortRev": "10f8132-dirty",
-        "lastModified": 1721965230,
-        "narHash": "sha256-HafRkIARSRJNZhhVUQkm+6YqDJsXXO7auMOyVC7E0mM=",
+        "dirtyRev": "cb6de983bcb07f08c084b015a180f4787059d320-dirty",
+        "dirtyShortRev": "cb6de98-dirty",
+        "lastModified": 1722051744,
+        "narHash": "sha256-iIorjdc9AtgIDZS1Qy1dHIwVB/+hoQbNIfyb7ETBJAM=",
         "type": "git",
         "url": "file:./telperion"
       },
