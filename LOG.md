@@ -364,4 +364,23 @@ one unit. I need to read about the other options, but they all look pretty strai
 I also refactored the Justfile a bunch, and got netboot image creation moved into a flake 'app'.
 It mostly works, but is quite messy, so I'm going to think about some ways to clean it up.
 
+# 27-JUL-2024
+
+## 0026
+
+Big pile of stuff done today, I did a ton of refactoring and cleaning, and I did a bit of secret
+scrubbing as well. I also ported over all the modules from glamdring, so it should be ready to turn
+public on github after a last once-over.
+
+laurelin and telperion are also almost there, which is moderately terrifying, I get anxious about
+these things.
+
+Rather than process those emotions, I instead work on getting the domain xmls at least temporarily
+loaded with some hacky work in the flake. I also have another hack from the refactoring to pull
+common configuration out of the `cadaster`, a module in `telperion` where it does not belong. I plan
+to move it over to laurelin after I'm done auditing the existing cadaster and pulling all the common
+config out. Ideally `cadaster` is really only the hardware configuration and stuff related to
+building the base image. In the end all my machines will be a collection of `laurelin`, `glamdring`,
+and `narya` configuration, everything else gets split up.
+
 

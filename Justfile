@@ -58,7 +58,7 @@ show-hosts ZONE: update
 ### DEPLOY JOBS
 
 @_deploy ARGS: update
-  nixos-rebuild -j $PARALLEL -I $NIX_PATH_INCLUDE --impure --upgrade {{ARGS}}
+  nixos-rebuild -j $PARALLEL --impure --upgrade {{ARGS}}
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{MACHINE}} via it's canonical
 # domain name
@@ -86,6 +86,7 @@ deploy-to LOCATION TASK CONFIG:
 [group('deploy')]
 deploy-netboot MACHINE: update
   sudo nix run \
+    -j $PARALLEL \
     --impure --no-warn-dirty \
     --log-format bar-with-logs \
     ".#build-image.{{MACHINE}}"
@@ -94,7 +95,7 @@ deploy-netboot MACHINE: update
 [group('deploy')]
 dry-build CONFIG:
   just deploy dry-build {{CONFIG}}
-  
+
 
 ### UTILITY
 
