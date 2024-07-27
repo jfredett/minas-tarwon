@@ -110,6 +110,9 @@ repl:
   nix --extra-experimental-features "flakes repl-flake" \
     repl -f '<nixpkgs>'
 
+cloc:
+  cloc --vcs=git --exclude-ext=.rc . narya glamdring laurelin telperion turnkey
+
 ### GIT
 
 # Push all repositories
@@ -129,3 +132,4 @@ commit-locks:
   git ci -m 'Update flake.lock'
   mani exec -a git add flake.lock
   mani exec -a -- git ci -m 'Update flake.lock'
+

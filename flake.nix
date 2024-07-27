@@ -75,14 +75,16 @@
     in {
       default = devenv.lib.mkShell {
         inherit inputs pkgs;
-        modules = [{
-          packages = with pkgs; [
-            busybox
-            mani
-            git
-            just
-          ];
-        }];
+        modules = [
+          { packages = with pkgs; [
+              busybox
+              mani
+              git
+              just
+              git-filter-repo
+              cloc
+          ]; }
+        ];
       };
     });
 
