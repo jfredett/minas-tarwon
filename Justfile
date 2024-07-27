@@ -4,9 +4,6 @@ set dotenv-load
 @default:
   just --list
 
-_diag:
-  echo {{env("NIX_PATH_INCLUDE")}}
-
 # Update all flakes
 [group('update')]
 update: local-update remote-update
@@ -60,7 +57,7 @@ show-hosts ZONE: update
 
 ### DEPLOY JOBS
 
-_deploy ARGS: update
+@_deploy ARGS: update
   nixos-rebuild -j $PARALLEL -I $NIX_PATH_INCLUDE --impure --upgrade {{ARGS}}
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{MACHINE}} via it's canonical
@@ -73,14 +70,17 @@ deploy TASK MACHINE:
 [group('deploy')]
 deploy-local TASK CONFIG:
   sudo just _deploy "--flake .#{{CONFIG}} {{TASK}}"
-#  sudo nixos-rebuild -j $PARALLEL --impure --upgrade --flake ".#{{CONFIG}}" {{TASK}}
+
+# Equivalent to `nixos-rebuild {{TASK}}` on the local machine using the machines hostname as the
+# target
+[group('deploy')]
+deploy-self TASK:
+  sudo just deploy-local {{TASK}} $(hostname)
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{LOCATION}} (IP or DN), applying the given {{CONFIG}}
 [group('deploy')]
 deploy-to LOCATION TASK CONFIG:
   just _deploy "--use-remote-sudo --target-host {{LOCATION}} --flake .#{{CONFIG}} {{TASK}}"
-#  nixos-rebuild -j $PARALLEL --impure --use-remote-sudo --upgrade \
-#    --target-host "{{LOCATION}}" --flake ".#{{CONFIG}}" {{TASK}}
 
 # Create and place a netbootable image in the netboot for the MACHINE specified in the CADASTER directory (specified in the flake)
 [group('deploy')]
