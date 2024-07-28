@@ -5,9 +5,9 @@ rsync SOURCE TARGET:
 
 # Start a Nix REPL
 [group('utility')]
-repl:
+repl: update
   nix --extra-experimental-features "flakes repl-flake" \
     repl -f '<nixpkgs>'
 
-cloc:
-  cloc --vcs=git --exclude-ext=.rc . narya glamdring laurelin telperion turnkey
+cloc *args:
+  cloc --vcs=git --exclude-ext=.rc . narya glamdring laurelin telperion turnkey {{args}}

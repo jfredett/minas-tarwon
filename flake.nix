@@ -100,18 +100,26 @@
       mkScript = name: script: flake-utils.lib.mkApp {
         drv = pkgs.writeScriptBin name script;
       };
-      mkBuildScript = machine: configuration: let
+      mkBuildScriptFor = domain: machine: configuration: let
         config = configuration.config;
       in (mkScript machine ''
         set -e
 
-        mac=$(echo "${config.laurelin.mac}" | tr -d :)
+        mac=$(echo "${config.laurelin.netboot.mac}" | tr -d :)
         target_dir=${netboot_dir}/$mac
         tmpdir=${tmpdir}/${machine}
 
         echo "Preparing necessary directories"
         mkdir -p $target_dir
 
+        echo "Build ${machine} image"
+        nix build --impure \
+          --log-format bar-with-logs \
+          --out-link $tmpdir \
+          ".#nixosConfigurations.\"${domain}.${machine}\".config.system.build.netboot"
+
+        # Shuffle images only if previous command succeeds -- `set -e` ensures this won't run
+        # unless that's true.
         if [ -e $target_dir/latest ]; then
           echo "Shuffling ${machine} images"
           latest_creation_time=$(stat -c %Z "$target_dir/latest")
@@ -119,21 +127,19 @@
           mv $target_dir/latest $target_dir/$timestamp
         fi
 
-        echo "Build ${machine} image"
-        nix build --impure \
-          --log-format bar-with-logs \
-          --out-link $tmpdir \
-          ".#nixosConfigurations.${machine}.config.system.build.netboot"
-
         echo "Copy ${machine} image to mount"
         rsync -r --copy-links --info=progress2 --info=name0 -a $tmpdir/ $target_dir/latest
 
         echo "Clean up"
         rm -rf $tmpdir
       '');
+      mkBuildables = domain: builtins.mapAttrs (mkBuildScriptFor domain) telperion.nixosConfigTree."${domain}";
     in {
       # BUG: This seems to break `nix flake show`
-      build-image = builtins.mapAttrs (machine: config: mkBuildScript machine config) self.nixosConfigurations;
+      build = {
+        cadaster = mkBuildables "cadaster";
+        "emerald.city" = mkBuildables "emerald.city";
+      };
     });
   };
 }
