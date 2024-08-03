@@ -390,4 +390,147 @@ that got me thinking that it'd be better to export `NIXPKGS_ALLOW_UNFREE`, since
 to litter the codebase with unfree tags when I can just export a variable in the devshell once that
 I can turn off if I want to see if I'm using anything unfree.
 
+## 1227
 
+I just made public all the component repos except `elenta` and `narya`, the former because there is
+nothing there (and TBH I may collapse it away into `minas-tarwon` proper), and the latter for
+obvious reasons.
+
+I started thinking about making `minas-tarwon` a bit more of a general monorepo for my projects,
+which would point to moving a lot of my existing automation out to `elenta` and having just
+project-management stuff in this repo, but I haven't really decided on organization yet.
+
+
+# 29-JUL-2024
+
+## 1748
+
+Over the weekend, I mostly refactored and tweaked things, and got DOP + it's VMs up and netbooting.
+
+I ran into an issue where building a bridge over a VLAN-split bond connection didn't seem to work. I
+spent almost no time debugging in it favor of getting the lab back to a working state; and just
+pulled an interface to dedicate to it. I suspect this is mostly a switching problem (enabling trunk
+ports or w/e), but I want to converge both the WiFi and LAN networks eventually and split everything
+via VLAN instead, so there's no point in spending time on it now when I'm just going to radically
+change it later.
+
+`barge` and `pinky` are both building but need a bit of work on their networking setup, eventually
+I'll pull that config into laurelin as a module; I'm thinking about how I want to organize the
+domains and get more of the libvirt config ported back into nix; but the idea is hazy right now, I
+think ideally the individual networks per domain will have some `nix` representation that I can pass
+in, so the function'd be something like:
+
+```nix
+laurelin = {
+    networks = [
+        { link = self.domains."foo.bar".networks."foo-net"; ip = "1.2.3.4"; }
+        { link = self.domains."foo.bar".networks."foo-net2"; ip = "1.2.3.5"; }
+        { link = self.domains."foo.bar".networks."foo-net3"; ip = "1.2.3.6"; }
+    ];
+};
+```
+
+This would then use the content of the `foo-net` attrset to populate all the networking config. It
+*should* be possible to re-use this model for 'real' networks, but I'll probably limit it to virtual
+networks to start. Ideally I can work out my abovementioned issue in virtuo and then port back.
+
+I can do a similar thing for the `domain` side of things, have a few 'standard' domains, then set a
+key in `laurelin` just for data's sake, to be used when deploying the config to a particular
+host.
+
+Unrelated to that, I started working on setting up `neotest` and want to start trying to get more of
+the workflow into `vim` so I need to jump between fewer windows. `tmux` makes it hurt less, but I
+want to have the lab integrated into the editor so I can more fluently manage, e.g., rebuilds and so
+on. I think that comes on the back of setting up a laminar server and moving some of the
+build/deploy stuff there. That also means moving towards purity/no more `--impure` builds, which is
+it's own can of worms.
+
+Finally, I need to get some way to provide DNS includes, maybe creating a more abstract 'reverse
+proxy' module that both configures an nginx service but also generates a zone-file w/ appropriate
+CNAMEs would work here? Something like:
+
+```nix
+laurelin = {
+    services = {
+        reverse-proxy = {
+            "parent.domain" = {
+                "subdomain" = {
+                    frontendPort = 80;
+                    backendPort = 8080;
+                }
+            };
+            # ...
+        };
+    };
+};
+```
+
+Then I would have that generate both an nginxconfig and a key that could then be pulled by the
+`show-dns` function in the flake? Ideally this would allow the 'parent' to exist as `hostname.canon`,
+then have it populate `hostname.parent.domain` as a CNAME to `hostname.canon` and then have the
+others similarly populate based on the desired subdomain.
+
+## 1850
+
+I may be getting slightly ahead of myself w/ barge, I think I need to write a more general 'docker
+container' module that I then feed additional items into, perhaps?
+
+I also need a dev machine that isn't this poor old laptop.
+
+# 1-AUG-2024
+
+## 0112
+
+Ran into an infinite recursion with my DNS generation, by referencing it directly, it has to query
+it's own configuration to calculate it's DNS. I think this only happens for the `canon` domain
+because of how I have split up the options. Since the `canon` domain is calculated from the configs,
+and the config of the dns server wants to include the `canon` domain, it has to calculate it's own
+config and down the rabbit hole went Alice.
+
+I think this is straightforward to fix, but I lack the will tonight. I can rely on precomputed files
+and make this a compilation step that just runs when I run a deploy. It's relatively quick to
+calculate statically, then I can refer to the static copy. That also make it easy to inspect when
+there are issues, and solves the 'serial number in the git repo' problem I haven't yet mentioned
+(the idea of trying to remember to maintain that number will result in many many many tiny commits
+full of more swear words than delta).
+
+# 2-AUG-2024
+
+## 2335
+
+I'm working on committing off a bunch of work, I solved the DNS issue without adding a second phase,
+it ultimately boiled down to needing to split and calculate each zone via the `nixosConfigTree`
+instead of using the `nixosConfigurations` directly.
+
+I have an annoying reversal that happens when calculating the `nixosConfigurations` that results in
+the domain coming first -- I haven't fixed that yet but it's so ugly I feel obligated to mention it
+in the log.
+
+I refactored some of the `deploy` scripts but `just` is really not up to what I'm putting it
+through, I think. In particular the `nix flake update` logic is a bit of a mess and often runs a
+couple times. This isn't a huge issue, but it burns time; I suppose moving development to a VM will
+help with that, but that would require I actually get that built, which isn't as interesting as
+chasing infinite recursion bugs.
+
+In any case, I'm getting `toto` updated tonight, which unblocks `barge` and puts me back to where I
+was with `ereshkigal` before cutting over. This whole process took about a month, but I think it was
+a good move, except that I truly hate dealing with multiple git repos like this. I've looked at
+using `worktrees` and they aren't _quite_ what I want.
+
+Really what I want is a monorepo that isn't a monorepo. I want each project to have an independent
+history, but I also want to be able to tie commits together across repos. Right now when I make an
+update in `telperion`, nothing coordinates it with `laurelin`. I _can_ do this through flakes (make
+each flake track via the remote git repo, update to specific SHAs, then do everything the 'intended'
+way, as I understand it), but this, plainly, sucks. Iteration on a change becomes difficult when
+building it, and while it is very handy to create 'canonical' deployments of a suite of tools, it
+isn't great for hacking on a lab, where purity isn't as valuable. I still want to be able to track
+that compatibility information, but most of the time I want to do it outside of my actual IaC; and
+instead have my 'monorepo' actually just be a bunch of independent git trees in the same git
+_database_, but with an additional way to tie two commits together when they are 'compatible'.
+Ideally also allowing that tie to be revoked if a later discovery shows they aren't compatible.
+
+The idea is still a little nascent, but I think this is doable in the context of `git` but with
+different semantics to the standard `git` repo. 
+
+In any case, I need another project like I need to increase my topological genus, so I'm just going
+to focus on standing up some services and getting `btg` sorted.
