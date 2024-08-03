@@ -52,11 +52,3 @@ projects:
     sync: true
     remote:
       origin: git@github.oz:jfredett/turnkey.git
-
-  # Temporary while I migrate
-  ereshkigal:
-    path: ereshkigal
-    url: git@github.oz:jfredett/ereshkigal.git
-    desc: Ereshkigal
-    tags: [legacy]
-    sync: true
