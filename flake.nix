@@ -4,7 +4,7 @@
   description = "Minas Tarwon";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.05";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -89,7 +89,7 @@
       };
     });
 
-    dns = telperion.dns;
+    genDNS = telperion.genDNS;
     nixosConfigurations = telperion.nixosConfigurations;
 
     # TODO: Clean this up somehow, probably import the script from another dir?
