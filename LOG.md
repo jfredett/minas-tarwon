@@ -534,3 +534,69 @@ different semantics to the standard `git` repo.
 
 In any case, I need another project like I need to increase my topological genus, so I'm just going
 to focus on standing up some services and getting `btg` sorted.
+
+# 3-AUG-2024
+
+## 0026
+
+Had to revert `toto`, I think I remember having an issue where it would serve DNS without issue for
+a while, then start refusing connections thereafter. I remember going to `unstable` helped with
+that, but I don't remember the details enough. I think there is a way to simply make NSD do the pass
+through, but I need to go do some reading to remember how.
+
+## 2036
+
+I have run into an issue with my netboot setup, which points to a more general issue I had been
+punting off until now.
+
+I have a bunch of machines I'd like to netboot that, ultimately, really shouldn't be netbooted.
+"Standard" (non-EFI) netbooting has a hard limit at a 4GB Ramdisk, and tbh, I don't want to go
+beyond that generally since things get quite memory hungry quickly, so while moving to an .efi-based
+boot system is probably 'good' in the long term, it helps entrench a bit of bad design I admitted
+while building things.
+
+Now I'm caught out a little earlier than I wanted.
+
+Initially I had planned to build `gehenna`, a machine that would be a nix-store-over-NFS server, but
+I read that this was nontrivial and projects like `tvix` exist but aren't yet ready for production.
+
+Ideally the system would work thus:
+
+Boot every machine to a common nix image that is stripped to the barest essentials, and contains
+only one post-boot script that asks it to be configured by some remote configurator. This base image
+would mount a nix store over NFS specific to that machine, so that it can then be treated exactly as
+if it were a 'regular' machine with a persistent nix store, but where that store is actually located
+on the far side of a network connection. This has an obvious duplication issue (different machines
+will likely share the same nix store objects, so they will be duplicated across the network), but I
+figured:
+
+1. Probably whatever native dedup happens would be sufficient to minimize the pain
+2. I don't really have a big enough architecture in mind to warrant fixing that storage problem
+   until I have it.
+
+Then I read [this](https://xyno.space/post/nix-store-nfs) which made me think I could do something
+about halfway between what the author does and my idea. A main .ro store with a .rw store per
+machine mounted over it, I didn't actually realize this was possible with NFS, but it actually seems
+pretty straightforward. The author there uses a tmpfs, but there is no reason I couldn't use a
+persistent store if I preferred, then I could factor out common values periodically into the .ro
+side to minimize duplication.
+
+I think this is a good idea, but I think it's going to take a pile of work to get right, so I'm
+going to focus for now on getting BTG formatted with 'real' storage so I can carve off a chunk for
+my dev VM and do things 'the old fashioned way' with a real backing disk, but I definitely need to
+do some more research on how to approach building `gehenna` and the NFS store.
+
+I really like the idea of a sort of 'stem cell' VM that I can differentiate simply by mounting the
+right underlying store and doing some command at it to 'activate' whatever configuration lives on
+the other side of that, I don't think such a thing would be too difficult. I could also see having a
+simple .ro-only approach and having builds happen entirely on the `gehenna` side rather than the
+client side, design is needed.
+
+## 2102
+
+A brief thought on the UEFI netbooting, in particular, this solves a major defect in terms of
+security, BIOS netbooting (what I'm doing now) is only over insecure protocols, fine for a closed
+lab, bad for anything that might ever be exposed to the internet, UEFI netbooting can be done over
+HTTPS, so definitely needs doing, for now I have BTG and DOP both standing up on a netbooted image
+via BIOS netbooting, so hopefully that unblocks me and I can return to UEFI later.
+
