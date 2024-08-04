@@ -4,7 +4,7 @@
   description = "Minas Tarwon";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable-small";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -137,7 +137,7 @@
     in {
       # BUG: This seems to break `nix flake show`
       build = {
-        cadaster = mkBuildables "cadaster";
+        canon = mkBuildables "canon";
         "emerald.city" = mkBuildables "emerald.city";
       };
     });

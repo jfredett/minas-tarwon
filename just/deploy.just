@@ -36,7 +36,7 @@ deploy-netboot MACHINE DOMAIN="canon": update
     -j $PARALLEL \
     --impure --no-warn-dirty \
     --log-format bar-with-logs \
-    ".#build.\"{{DOMAIN}}\".{{MACHINE}}" --show-trace
+    ".#build.\"{{DOMAIN}}\".{{MACHINE}}"
 
 # Create a dry-build of the configuration specified by {{CONFIG}}
 [group('deploy')]
