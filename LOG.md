@@ -600,3 +600,63 @@ lab, bad for anything that might ever be exposed to the internet, UEFI netbootin
 HTTPS, so definitely needs doing, for now I have BTG and DOP both standing up on a netbooted image
 via BIOS netbooting, so hopefully that unblocks me and I can return to UEFI later.
 
+
+# 5-AUG-2024
+
+## 1144
+
+I've got the format-disks stuff wrapped up in some Nix code now, I need to extend this into a
+module, but essentially it just writes the `format-disks` script based on the Attrset I feed it; it
+should be extensible to other machines, but does expect to be able to wipe all specified disks so
+it's still an imperative management strategy, I doubt there is a good declarative one for disks
+since they are essentially entirely made of statefulness.
+
+In any case, I plan to manage these disks imperatively and track changes via the CHANGELOG in the
+cadaster, so it's not a big issue.
+
+Remaining on the TODO for this is:
+
+1. Backups to Nancy (and thus to cloud)
+2. Porting all the VMs over to use the disk I've set up
+3. Setting up the NFS store on BTG
+
+## 2331
+
+I started moving the ZFS configuration into a dedicated module. This is pretty unnecessary but I
+wanted to start it and leave a branch to come back to later. I set up the existing configuration
+with a simple 'mode' flage to control whether it leaves the 'prepare' script in place, or if it just
+tries to mount the datasets. I'm not automatically calculating the filesystems, but I think that
+will be easier to do when it's properly a module and not just the shim.
+
+# 7-AUG-2024
+
+(and a bit of 6-AUG too)
+
+## 0141
+
+I'm doing something wrong with the filesystem definitions, I need to rebuild the pool again.
+
+I got the script using wwns to make sure it persists, but that wasn't why the thing was breaking on
+boot, to be honest, I'm not sure why it's breaking on boot, but I think I might be able to skirt all
+of this because of [this](https://nixos.wiki/wiki/ZFS#Mounting_pools_at_boot), but that needs a
+rebuild.
+
+## 1142
+
+I've got it mostly working with the automount, but I'd still like to understand what I was doing
+wrong w/ the filesystem definitions; probably I needed to set different options or something, the
+emergency shell never managed to start, so it's hard to figure out exactly what went wrong.
+
+In any case, I like the way I laid out the disks and want to extend the idea of the cadaster in that
+way, building a large nixos-style module system that describes all my hardware (and maybe integrates
+with the nascent [nixos facter](https://github.com/numtide/nixos-facter) tool) and then can be used
+to populate other parts of the configuration by reference seems pretty handy.
+
+Ultimately I think it also points at a way out of the nix ecosystem while still maintaining the
+'single common configuration system' that I like about NixOS. There's no reason to couple it to Nix
+besides the convenience of the package manager, a declarative description of one's hardware and
+virtual hardware architecture is useful in it's own right and could ostensibly be compiled to
+instructions to configure virtually anything from a known starting state. My interest in it is
+actually simpler, to boot, I just want to be able to simulate arbitrary architectures and employ
+some kind of static analysis to surface issues at 'compile time'; I think getting anywhere near that
+for architecture design could be extremely valuable.
