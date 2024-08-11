@@ -11,3 +11,6 @@ repl: update
 
 cloc *args:
   cloc --vcs=git --exclude-ext=.rc . narya glamdring laurelin telperion turnkey {{args}}
+
+host-key PATH:
+  ssh-keygen -f "{{PATH}}.ed25519.key" -N "" -t ed25519
