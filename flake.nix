@@ -4,7 +4,7 @@
   description = "Minas Tarwon";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable-small";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";

@@ -660,3 +660,97 @@ instructions to configure virtually anything from a known starting state. My int
 actually simpler, to boot, I just want to be able to simulate arbitrary architectures and employ
 some kind of static analysis to surface issues at 'compile time'; I think getting anywhere near that
 for architecture design could be extremely valuable.
+
+## 1532
+
+I'm going to do some tweaking to the `cadaster` idea, I'm going to split it between `narya` and
+`telperion`, two items with the same underlying schema, both provided as flake outputs, `telperion`
+will pull in and merge `narya`'s definitions into it's own at build time, but will otherwise be
+unaware, that structure will then be available to all subsequent definitions. I'll probably just
+keep the hardware defs in `telperion` for now, but they may be extracted to `laurelin` later if that
+seems prudent.
+
+The structure will be something like:
+
+```nix
+
+{
+    compute = {
+        "hostname" = {
+            # metadata
+        };
+        # ...
+    };
+    storage = {
+        disks = {
+            "diskname" = {
+                # metadata
+                # includes a reference to `cadaster.compute.hostname` for where it's installed
+            };
+            # ...
+        };
+    };
+    network = {
+        switches = {
+            "switchname" = {
+                # metadata
+                # Should include port maps and the like.
+            };
+            # ...
+        };
+        routers = {
+            "routername" = {
+                # metadata
+            };
+            # ...
+        };
+        firewalls = {
+            "firewallname" = {
+                # metadata
+            };
+            # ...
+        };
+    };
+    racks = {
+
+    };
+    power = {
+
+    };
+    # ...
+}
+```
+
+The idea is to represent each physical item in this with all it's metadata, but none of it's
+configuration. Configuration then consumes this to build the actual configuration, and the
+resulting configuration is then used to build the actual system images.
+
+Essentially it's DCIM-as-code. I'm sure this has been done before, but reinventing wheels is fun.
+
+I'm going to build each chunk as nixos modules, and then I can use that to attach additional
+computed information to each section. Ideally I can use this to drive some sort of
+testing/monitoring tools as well.
+
+# 10-AUG-2024
+
+## 1419
+
+Working on the DNS issue with toto, I've set it up so all of KANSAS is bypassing my internal DNS so
+that normal operations are maintained, and only my laptop has DNS issues, while my main machine
+(Hedges) is not so-encumbered, that way I'm able to work freely on `toto` without knocking everyone
+offline, maintaining the most important invariant my lab must maintain:
+
+1. Do not interrupt the Bluey.
+
+I think the issue is probably with the new NSD stuff, I can still resolve some `.canon` addresses
+but I suspect that's just cache.
+
+It's always DNS that gets you.
+
+
+## 2251
+
+This turned out to be a simple bit of misconfiguration, using `.canon` instead of `.emerald.city`,
+and a missing port open.
+
+I like it when it's simple.
