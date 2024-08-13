@@ -754,3 +754,40 @@ This turned out to be a simple bit of misconfiguration, using `.canon` instead o
 and a missing port open.
 
 I like it when it's simple.
+
+# 11-AUG-2024
+
+## 1512
+
+Working on the hostkey problem, I'm starting simple, just getting it set for the non-persistent
+(i.e., netbooted) machines, I also include a 'generic' one that I can use in case I don't want to
+generate one right away (more for testing new netbooted machines).
+
+I'm planning to try for a "Nix Store over NFS" approach since my netbooted machines should be more
+or less RO. I think that should make 'most' of the infrastructure non-persistent; though I haven't
+worked out exactly how I'm going to do the complicated dance there.
+
+One upside of putting all my hostkeys in a single bucket is I *should* be able to pregenerate a
+'known-hosts' file which I can actually trust to some extent, so that if I get an 'unknown host' it
+would actually indicate something has gone awry.
+
+At time of writing I'm just finishing up the experiment with `pinky` and will roll out the change
+once it's ready. I've kept all the keys in `narya`, so they're out of the way for the moment.
+Eventually these'll move to Vault and be pulled in via `turnkey`, so they won't need to be in any
+repo.
+
+This is also nice because it makes rotation pretty pleasant; I can just generate a new key, update
+the relevant machines, and (eventually) regen my knownhost file appropriately.
+
+## 2313
+
+Got storage pools set up, I think I need to write something to sync the xmls back and forth, since
+the easiest way to manage these right now is just to copy the xml back and forth and do the
+adjusting in virt-manager.
+
+# 12-AUG-2024
+
+## 2033
+
+Got some more stuff working w/ barge, needed to add `recommendedProxySettings` to each of the
+proxied items. I still need to setup outbound VPN for these as well.
