@@ -43,3 +43,13 @@ deploy-netboot MACHINE DOMAIN="canon": update
 dry-build CONFIG:
   just deploy dry-build {{CONFIG}}
 
+deploy-all-netboot: update
+  just deploy-netboot babylon-the-great
+  just deploy-netboot dragon-of-perdition
+  just deploy-netboot pinky emerald.city
+  just deploy-netboot barge emerald.city
+
+
+
+
+
