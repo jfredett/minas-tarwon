@@ -40,8 +40,8 @@ deploy-netboot MACHINE DOMAIN="canon": update
 
 # Create a dry-build of the configuration specified by {{CONFIG}}
 [group('deploy')]
-dry-build CONFIG:
-  just deploy dry-build {{CONFIG}}
+dry-build MACHINE DOMAIN: update
+  just _deploy-direct "dry-build --flake .#\"{{DOMAIN}}.{{MACHINE}}\""
 
 deploy-all-netboot: update
   just deploy-netboot babylon-the-great
