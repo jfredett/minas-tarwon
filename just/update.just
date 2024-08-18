@@ -24,7 +24,6 @@ remote-update:
 [group('update')]
 @local-update:
   echo "$(tput bold)Updating local flakes$(tput sgr0)"
-  just update-input elenta
   just update-input narya
   just update-input glamdring
   just update-input laurelin

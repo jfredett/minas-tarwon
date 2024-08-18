@@ -27,13 +27,6 @@
       };
     };
 
-    elenta = {
-      url = "git+file:./elenta";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
-
     laurelin = {
       url = "git+file:./laurelin";
       inputs = {

@@ -17,14 +17,14 @@ projects:
     remote:
       origin: git@github.oz:jfredett/laurelin.git
 
-  elenta:
-    path: elenta
-    url: git@github.oz:jfredett/elenta.git
-    desc: Send a Message
-    tags: [nix, operations, scripts, tool]
-    sync: true
-    remote:
-      origin: git@github.oz:jfredett/menta.git
+      #  elenta:
+      #    path: elenta
+      #    url: git@github.oz:jfredett/elenta.git
+      #    desc: Send a Message
+      #    tags: [nix, operations, scripts, tool]
+      #    sync: true
+      #    remote:
+      #      origin: git@github.oz:jfredett/menta.git
 
   narya:
     path: narya

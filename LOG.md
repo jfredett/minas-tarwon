@@ -791,3 +791,75 @@ adjusting in virt-manager.
 
 Got some more stuff working w/ barge, needed to add `recommendedProxySettings` to each of the
 proxied items. I still need to setup outbound VPN for these as well.
+
+# 15-AUG-2024
+
+## 1243
+
+Got some stuff reorganized and pushed up. I need to build an installer image I can have `randy` boot
+off of, so I can install on the 'real' disk and get to something functional, I also need to set up
+backups on just the randy image independent of other things on `nancy`'s side. So some kind of
+`rsync` handoff to network storage, etc.
+
+## 1746
+
+I think next step is a grafana/prometheus/loki stack, I'm tired of having to jump all over creation
+to find logs.
+
+# 17-AUG-2024
+
+## 1346
+
+Moved dashy to a raw YAML config in the repo, I'd like to next move this to a mashable nix-based one
+using the existing nix->yaml conversion stuff, so I can have various parts of the infra
+automatically contribute their dashy configs when dashy is enabled. 
+
+```nix
+
+{
+    pageInfo = {
+        title = "Emerald.City";
+        description = "Off to see the wizard";
+        navLinks = [
+            { title = "Github"; path = "https://github.com/jfredett"; }
+            { title = "NixOS"; path = "https://nixos.org"; }
+            { title = "Dashy Docs"; path = "https://dashy.to/docs"; }
+        ];
+    };
+
+    # ... snip for other sections
+}
+
+```
+
+Should translate naturally, then the `section` section is just an attrset of section-name -> other
+config.
+
+# 18-AUG-2024
+
+## 1013
+
+As I work on getting the remaining `barge` services running, I'm thinking about the CI side of this
+and how to keep all these machines updated.
+
+I could set up `hydra`, but I think that's overkill for my use right now; it is nice that it's a
+bespoke 'build nixos images' kind of tool, but I think I can probably get most of the value with
+less setup using some `laminar` scripts that introspect on the `minas-tarwon` flake; and have it
+periodically rebuild each of the `canon` images as `vm`s into a centralized nix store, then if the
+target machines mount `/nix` over `nfs` and are otherwise mostly static (i.e., they don't have any
+local OS state stored on whatever disks they may have), then it should be possible to verify the
+image in CI, then automatically deploy when those images work alright.
+
+Independently, I need to set up a metrics machine, and I think I'm going to create a second,
+dedicated VM for it, and probably just set up the services using the other, 'just give it a
+nixos-config' style container, more as an experiment than anything else. I should be able to re-use
+the definitions in `laurelin` inside these containers, which would make it easier to 'promote' them
+to full VMs if I wanted to, which is kind of cool -- same configuration in multiple locations.
+
+I'd also like to experiment with `microvm.nix`, which I've read a bit about, and more generally with
+microvms.
+
+Lastly, I've removed `elenta` for now, as I'm not really doing anything with it and I don't think
+it'll be necessary for a while. Right now building in place is easier, and working out the
+deployment strategy for multiple domains is a problem for future Joe.
+
