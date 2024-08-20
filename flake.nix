@@ -109,7 +109,7 @@
         nix build --impure \
           --log-format bar-with-logs \
           --out-link $tmpdir \
-          ".#nixosConfigurations.\"${domain}.${machine}\".config.system.build.netboot"
+          ".#nixosConfigurations.\"${machine}.${domain}\".config.system.build.netboot"
 
         # Shuffle images only if previous command succeeds -- `set -e` ensures this won't run
         # unless that's true.
