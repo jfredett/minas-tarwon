@@ -863,3 +863,50 @@ Lastly, I've removed `elenta` for now, as I'm not really doing anything with it 
 it'll be necessary for a while. Right now building in place is easier, and working out the
 deployment strategy for multiple domains is a problem for future Joe.
 
+# 19-AUG-2024
+
+## 0006
+
+I've got loki running, promtail modules roughed in, and I just need to get the prometheus exporters
+set up the same way. I've set them to opt out, since I'd rather have the logs then remain dogmatic
+to the 'explicit-is-better-than-implicit' principle.
+
+I like how promtail converts the nix code directly to JSON, and I need to steal that for Dashy, as
+that gets me exactly what I want, each service can automatically provide a dashy snippet that I can
+opt into on a per-dashy-instance basis.
+
+
+# 20-AUG-2024
+
+## 1738
+
+I rigged up vpn routing, but ran into an issue where because the containers now routed through a
+VPN, they cannot see my local DNS for local DNS queries. I think it should be possible to bypass
+this but I don't really want to at the moment and the whole setup needs some more significant
+refactoring anyway, so for the moment I'm just going to turn it all back off but leave my changes in
+place.
+
+All this happens in `narya`, though, so it's not really visible to anyone but me. Maybe someday I'll
+open source that bit but for now the mystery shall remain.
+
+Independently and in addition, I stood up `daktylos` in the `emerald.city` domain to be the
+loki/prom server, and wired up exporters for nginx, systemd, and the `node` exporter. There is
+definitely some overlap to unpack for these, and I'm beginning to dislike how fat `telperion`'s
+flake is growing, but I think the plan will be to move the logic to `laurelin`'s library, then have
+a leaner `telperion` library which does the various calculations. Domains eventually should be
+flakes unto themselves, I think, so for the moment that stuff can stay put, but the `scrapeTargets`
+key is definitely in need of refactoring.
+
+I also added additional horsepower to `barge` while I work on getting things configured, I really
+don't care for the `*arr` apps, they feel bloated and it's odd to have them split the way they are,
+but there doesn't seem to be any reasonable alternative out there, so I think I'm stuck with them
+for now.
+
+Remaining, I need to get my dev VMs built, and I need to start thinking about NFS mounting the `nix`
+store, the two things are not unrelated, but it is a big job so I might take a break from this for a
+bit after I finish the work I've got going now.
+
+## 1821
+
+I'm exhausted. There are performance issues to chase down, and things to fix, but I'm tired so I'm
+going to put this down for a few days, I think.
