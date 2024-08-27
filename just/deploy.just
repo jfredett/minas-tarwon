@@ -9,7 +9,7 @@
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{MACHINE}} via it's canonical domain name
 [group('deploy')]
 deploy MACHINE DOMAIN="canon" TASK="test":
-  just deploy-to "{{MACHINE}}.{{DOMAIN}}" {{MACHINE}} {{DOMAIN}} {{TASK}}
+  just deploy-to "{{MACHINE}}.{{DOMAIN}}" {{MACHINE}} {{DOMAIN}} {{TASK}} 
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the local machine using the given {{CONFIG}}
 [group('deploy')]
