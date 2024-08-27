@@ -910,3 +910,58 @@ bit after I finish the work I've got going now.
 
 I'm exhausted. There are performance issues to chase down, and things to fix, but I'm tired so I'm
 going to put this down for a few days, I think.
+
+## 2049
+
+One last thought before I put things down, I suspect the majority of my problem is that barge is
+overloaded with IO, network, and cpu intensive tasks. I spent a little time setting up some panels
+so I could better diagnose, and this not to say I didn't see it coming, I think if I split out the
+rev-proxy into it's own VM that's shared between `daktylos` and `barge`, and then split the
+torrent/vpn component into it's own VM(s), that should get me much closer to where I want to be. I
+also suspect at least some of it has to do with the way networking is setup on BTG; since all the VM
+traffic has to go in and out through the same pipe, things are simply not very quick when I'm
+saturating said pipe. I may temporarily create a secondary bridge that can be dedicated to the
+torrent side.
+
+I also suspect I've got the CPUs configured in a poor topology that is confusing things and perhaps
+slowing them down a bit. I should also review and ensure all the relevant kernel modules and such
+are loaded -- I am at least two layers of virtualization deep, I suppose I could also try running
+these as containers directly on the host, but I'm inclined to try to get this working (as eventually
+I plan to run all this on k8s anyway).
+
+
+# 24-AUG-2024
+
+## 0101
+
+```nix
+nix-instantiate --eval -E 'builtins.fromJSON (builtins.readFile ./telperion/emerald.city/configs/grafana/dashboards/system-view.json)' | nixfmt
+```
+
+and
+
+```nix
+nix-instantiate --eval -E 'let template = import ./telperion/emerald.city/configs/grafana/dashboards/system-view-template.nix; in builtins.toJSON (template "daklytos")'
+```
+
+are my handy snippets of the day, the former I saw on a discourse answer, for how to quickly convert
+json -> nix. I have some grafana dashboards I want to templatize, and the first step is getting them
+converted. This made short work. Now I took this simple system dashboard and made it into a
+template, I can then rattle off a bunch of basic dashboards for each of my services, and then
+specialize them and store the specialized versions in the `configs` directory of telperion to
+override it. `daktylos` uses a library function from `laurelin` to invoke the dashboards that are
+already stored over there, and I'll build up some helper functions as it makes sense. Once I've got
+the initial version built, when I specialize them I can import them back into the repo, and
+eventually I'll set up something automated to push them to their own git repo or something.
+
+# 27-AUG-2024
+
+I got a bunch of things set up in glamdring over the last couple days, I'm hoping to get my workflow
+more contained inside of vim itself, so that ultimately I can more or less obviate the need for tmux
+and rely only on a vim server. To this end I added `neogit` (and `gitblame`, `gitgutter`, and
+`diffview` to support it), `neotest`, and `toggleterm` to my setup. The quake-style terminal is
+perfect for what I need most of the time, and once I sort out a good system for backgrounding
+processes from it I shouldn't really need more than the one anyway. A glance of the help did suggest
+it is possible to run a couple independent terminals via the plugin.
+
+
