@@ -585,10 +585,10 @@
         "nur": "nur"
       },
       "locked": {
-        "dirtyRev": "04900ede851de937118f9bad806bdc7092f442e1-dirty",
-        "dirtyShortRev": "04900ed-dirty",
-        "lastModified": 1724695811,
-        "narHash": "sha256-T+UsGFyoe4bhaclJxSaNj+9YIkWPKRv9AyXmHw+qqX0=",
+        "dirtyRev": "47159adc9c1aa294d190d0823a29daa71bf799fe-dirty",
+        "dirtyShortRev": "47159ad-dirty",
+        "lastModified": 1724733973,
+        "narHash": "sha256-xr7XSv8Cb7n7HSjxhvx8LJ0QpAL+oPyTA52Ys3ugujU=",
         "type": "git",
         "url": "file:./glamdring"
       },
@@ -610,10 +610,10 @@
         "nur": "nur_3"
       },
       "locked": {
-        "dirtyRev": "04900ede851de937118f9bad806bdc7092f442e1-dirty",
-        "dirtyShortRev": "04900ed-dirty",
-        "lastModified": 1724695811,
-        "narHash": "sha256-PbwaO5/mrg1uwmyQeh9gVKQj++t+Wm2RWiHA40nnYWo=",
+        "dirtyRev": "47159adc9c1aa294d190d0823a29daa71bf799fe-dirty",
+        "dirtyShortRev": "47159ad-dirty",
+        "lastModified": 1724733973,
+        "narHash": "sha256-ug5uF3SH9XFRhR/e0a7neHA2CpHIjTnTi/6w3VCrcQE=",
         "type": "git",
         "url": "file:./glamdring"
       },
@@ -767,7 +767,7 @@
         "dirtyRev": "3c0aacebb7c71c53b912f5b3b006cd2bb56fef4e-dirty",
         "dirtyShortRev": "3c0aace-dirty",
         "lastModified": 1724647184,
-        "narHash": "sha256-FxBc+2dkbikmoR1Az9+r2Jd0MT8fXfGfr5h8ZGwcoOs=",
+        "narHash": "sha256-rOCx4+5whCgbFrDSdkQRrePHArPJ4WRI06HtmmHLfBM=",
         "type": "git",
         "url": "file:./narya"
       },
@@ -1472,10 +1472,10 @@
         "nur": "nur_4"
       },
       "locked": {
-        "dirtyRev": "815dad0b9e5645bef878144a99c39d5804267ad2-dirty",
-        "dirtyShortRev": "815dad0-dirty",
-        "lastModified": 1724641453,
-        "narHash": "sha256-AtRld09WSXnf7tSG8vkn9yGd34nlUSWR4iM3g7oMiPU=",
+        "dirtyRev": "31e9bce631e47c2e4856ce429a25cd8a31966e1c-dirty",
+        "dirtyShortRev": "31e9bce-dirty",
+        "lastModified": 1724734330,
+        "narHash": "sha256-jj1pa491BbCeb1bG7qbY7BX8PtqnK2Spvhsgm9IsfQA=",
         "type": "git",
         "url": "file:./telperion"
       },
