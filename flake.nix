@@ -77,6 +77,7 @@
               just
               git-filter-repo
               cloc
+              nixfmt-rfc-style
           ]; }
         ];
       };
