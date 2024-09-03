@@ -31,6 +31,8 @@
       url = "git+file:./laurelin";
       inputs = {
         nixpkgs.follows = "nixpkgs";
+        hyprland.follows = "hyprland";
+        stylix.follows = "stylix";
       };
     };
 
@@ -45,8 +47,13 @@
       url = "git+file:./glamdring";
       inputs = {
         nixpkgs.follows = "nixpkgs";
+        hyprland.follows = "hyprland";
+        stylix.follows = "stylix";
       };
     };
+
+    stylix.url = "github:danth/stylix";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
 
     telperion = {
       url = "git+file:./telperion";
@@ -96,7 +103,7 @@
       };
       mkBuildScriptFor = domain: machine: configuration: let
         config = configuration.config;
-      in (mkScript machine ''
+      in (mkScript machine /*bash*/ ''
         set -e
 
         mac=$(echo "${config.laurelin.netboot.mac}" | tr -d :)

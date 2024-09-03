@@ -69,6 +69,7 @@ deploy-all: update
   just deploy toto canon switch
   just deploy archimedes canon switch
   just deploy maiasaura canon switch
+  just deploy randy emerald.city switch
 
 
 

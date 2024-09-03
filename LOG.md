@@ -964,4 +964,53 @@ perfect for what I need most of the time, and once I sort out a good system for 
 processes from it I shouldn't really need more than the one anyway. A glance of the help did suggest
 it is possible to run a couple independent terminals via the plugin.
 
+# 31-AUG-2024
 
+## 2150
+
+I've been working on getting some more exporters set up, and I am finding a 'next-domino' problem as
+I roll out the `ipmi` exporter, I need to deploy each machine with the new config, but once I do
+that I need to deploy `daktylos` to update it's configuration to search. This made me think about
+how the eventual 'real' methodology rolls out; I want to be able to develop an abstract
+configuration of machines such that the configuration will be the same no matter how it is
+deployed, so that I can then specify the resources necessary for a machine to play a particular
+role, and then separately have code that tries to efficiently deploy it using some configuration
+data. Essentially separating design from deployment and creating something like a 'high level'
+terraform.
+
+This problem -- knowing what to deploy when some configuration changes -- is very similar to the
+incremental compilation problem, and I think it'll be an interesting thing to build strategies for
+in the operations context. For now, I just have to remember to deploy them sequentially; I think
+once I set up the CI server I'll add some simple logic to allow me to trigger common build patterns
+with flags or something. Ideally I could have some way to specify what parts of the config changing
+it cares about, but that's probably much more complicated.
+
+# 2-SEP-2024
+
+## 1355
+
+https://nix.dev/manual/nix/2.18/advanced-topics/distributed-builds.html
+
+I need to set up a builder-file that I can put into the justfile that uses DOP, maybe a VM on BTG,
+Archi, Hedges (eventually), and whatever other hardware seems reasonable to use as a builder. I
+don't think I have hyprland set up correctly to use the cache, so I'm stuck compiling. I don't -- in
+principle -- hate the idea of compiling it, but it is slow and it'd be nice to have it build on the
+giant R730 that is otherwise unoccupied.
+
+https://nixos.wiki/wiki/Distributed_build
+
+That wiki indicates I might be able to specify this in nix directly (rather than through a separate
+file), that'd be ideal since I can probably calculate it and have an option set within `laurelin`
+that allows a machine to mark itself as a builder. That'll move nicely into the `gehenna` setup
+
+## 2107
+
+I think I have an idea for how to improve the way I'm handling cross-flake concerns (e.g.,
+calculating DNS or scrapeTargets), these should live in a library provided by `minas-tarwon` itself,
+it can pass along the other flakes for reference, but otherwise be a 'normal' nix library. Then I
+can set up a just job to start a repl with this library preloaded; and be able to directly interact
+with the library; and additionally I can create a 'run' job that takes an argument, evaluates it,
+and shows the result, just wrapping the `nix-instantiate` command.
+
+That'll can be used as plumbing for a nicer CLI tool at some point, but for now it should make it
+easier to organize the various scripts that currently just live in the flake.
