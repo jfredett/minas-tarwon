@@ -19,5 +19,9 @@ commit-locks:
   mani exec -a git add flake.lock
   mani exec -a -- git ci -m 'Update flake.lock'
 
-
-
+refresh-locks:
+  rm flake.lock
+  nix flake update
+  mani exec -a rm flake.lock
+  mani exec -a nix flake update
+  just commit-locks

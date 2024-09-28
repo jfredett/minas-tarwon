@@ -23,7 +23,7 @@ deploy-self TASK="test":
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{LOCATION}} (IP or DN), applying the given {{CONFIG}}
 [group('deploy')]
-deploy-to LOCATION CONFIG DOMAIN="canon" TASK="test": update
+deploy-to LOCATION CONFIG DOMAIN="canon" TASK="test":
   just _deploy-direct "--use-remote-sudo --target-host {{LOCATION}} --flake .#"{{CONFIG}}.{{DOMAIN}}" {{TASK}}"
 
 # Equivalent to deploy-to, but skips the update
@@ -33,21 +33,22 @@ deploy-no-update LOCATION CONFIG DOMAIN="canon" TASK="test":
 
 # Create and place a netbootable image in the netboot for the MACHINE specified in the DOMAIN defined in telperion
 [group('deploy')]
-deploy-netboot MACHINE DOMAIN="canon": update
+deploy-netboot MACHINE DOMAIN="canon":
   sudo nix run \
     -j $PARALLEL \
     --impure --no-warn-dirty \
     --log-format bar-with-logs \
     ".#build.\"{{DOMAIN}}\".{{MACHINE}}"
 
+
 # Create a dry-build of the configuration specified by {{CONFIG}}
 [group('deploy')]
-dry-build MACHINE DOMAIN: update
+dry-build MACHINE DOMAIN:
   just _deploy-direct "dry-build --flake .#\"{{MACHINE}}.{{DOMAIN}}\""
 
 # Build new images of all netbootables
 [group('deploy')]
-deploy-all-netboot: update
+deploy-all-netboot:
   just deploy-netboot babylon-the-great
   just deploy-netboot dragon-of-perdition
   just deploy-netboot pinky emerald.city
@@ -56,7 +57,7 @@ deploy-all-netboot: update
 
 # UNSAFE: Deploy everything based on the configuration in the current checkout of the repo.
 [group('unsafe')]
-deploy-all: update
+deploy-all:
   # deploy the netboot machines w/ just 'test', building the images is a separate job since it sucks
   # so much disk space while it does it.
   just deploy babylon-the-great
@@ -70,8 +71,4 @@ deploy-all: update
   just deploy archimedes canon switch
   just deploy maiasaura canon switch
   just deploy randy emerald.city switch
-
-
-
-
 
