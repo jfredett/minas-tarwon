@@ -78,13 +78,14 @@
         modules = [
           #{ dotenv.enable = true; }
           { packages = with pkgs; [
-              busybox
-              mani
-              git
-              just
-              git-filter-repo
-              cloc
-              nixfmt-rfc-style
+            busybox
+            mani
+            git
+            just
+            git-filter-repo
+            cloc
+            ipmitool
+            nixfmt-rfc-style
           ]; }
         ];
       };
@@ -115,17 +116,17 @@
 
         echo "Build ${machine} image"
         nix build --impure \
-          --log-format bar-with-logs \
-          --out-link $tmpdir \
-          ".#nixosConfigurations.\"${machine}.${domain}\".config.system.build.netboot"
+        --log-format bar-with-logs \
+        --out-link $tmpdir \
+        ".#nixosConfigurations.\"${machine}.${domain}\".config.system.build.netboot"
 
         # Shuffle images only if previous command succeeds -- `set -e` ensures this won't run
         # unless that's true.
         if [ -e $target_dir/latest ]; then
-          echo "Shuffling ${machine} images"
-          latest_creation_time=$(stat -c %Z "$target_dir/latest")
-          timestamp=$(date -d "@$latest_creation_time" +"%d-%b-%Y-%H%MET")
-          mv $target_dir/latest $target_dir/$timestamp
+        echo "Shuffling ${machine} images"
+        latest_creation_time=$(stat -c %Z "$target_dir/latest")
+        timestamp=$(date -d "@$latest_creation_time" +"%d-%b-%Y-%H%MET")
+        mv $target_dir/latest $target_dir/$timestamp
         fi
 
         echo "Copy ${machine} image to mount"
@@ -133,7 +134,7 @@
 
         echo "Clean up"
         rm -rf $tmpdir
-      '');
+        '');
       mkBuildables = domain: builtins.mapAttrs (mkBuildScriptFor domain) telperion.nixosConfigTree."${domain}";
     in {
       # BUG: This seems to break `nix flake show`
