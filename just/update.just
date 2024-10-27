@@ -33,5 +33,4 @@ remote-update:
 [group('update')]
 @update-input INPUT:
   echo "$(tput bold)-> Updating {{INPUT}}$(tput sgr0)"
-  nix flake lock --no-warn-dirty --update-input {{INPUT}}
   nix flake update --no-warn-dirty {{INPUT}}/

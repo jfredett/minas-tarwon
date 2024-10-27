@@ -1014,3 +1014,124 @@ and shows the result, just wrapping the `nix-instantiate` command.
 
 That'll can be used as plumbing for a nicer CLI tool at some point, but for now it should make it
 easier to organize the various scripts that currently just live in the flake.
+
+# 8-OCT-2024
+
+## 2140
+
+Full disclosure, I scrapped an old entry that was incoherent, I was jotting down a TODO List and not making a lot of
+sense.
+
+I got a P40 installed in BTG, and I'm working on figuring out if I can set it up as an MDEV or if I just need to
+passthru to `randy` and call it. I'm leaning toward the latter. I have a 2080 also hanging around that I'll install once
+the P40 is working. Between these I should have plenty of GPU horsepower to insource my LLM usage and also get a proper
+dev VM built for both `randy` (for normal work) and `hardie` (for security/pentesting).
+
+I'm hoping that if I can get the MDEV set up, I'll be able to run a few VMs backed by at least the P40, ideally it's the
+main 'development' card; and then I can use later hardware for the actual compute task on DOP.
+
+Spricht, DOP is getting set up to work as a development machine right now, the build times on `hazel` are getting out of
+hand and it's not like DOP is doing anything else right now.
+
+Besides these minor roadblocks (like having no idea how MDEV works), things proceed apace. I've been focusing much more
+on [hazel](https://github.com/jfredett/hazel) recently, so the lab work has slowed. I'm using it as a testbed for some
+tools I need to build for `brocard`. In particular working with `ratatui` has been pretty fun, and `tokio` less
+terrifying than advertised.
+
+# 12-OCT-2024
+
+## 2157
+
+I've been having an issue on DOP (and BTG, for that matter) where after running an in-place update via `just deploy
+dragon-of-perdition`, for instance, it will restart some part of the networking stack and then fail to bring it back up.
+Killing my SSH connection and making it a real pain to return to function.
+
+I think this has to do with the silly 'bond everything' thing I did, but I like the silly thing so I've just gotta
+figure out how to fix it and I didn't want to forget.
+
+## 1335
+
+I've been doing some work on the the nvim config today, getting DAP set up and generally tuning up the editor, which
+I've neglected for a bit now while I got used to all the changes I made the last time I was stuck on other things.
+
+I'm thinking I need to adjust all my keybindings to be more consistent and more focused. Right now I manage them poorly,
+and there is no mnemonic consistency to them. I do prefix most of them with leader, and I generally have 2 'kinds' of
+bindings, `<leader><something><leader>` and `<leader><something><space>`. I can 'arpeggiate' these, so I don't have to
+hold them all down (chord), but if I type them quickly, it feels like one 'action'. I like commands to alternate between
+hands, as well, so `,l,` is bad, because I hit `,` with my right hand, and then have to hit `l` with my right as well,
+which is uncomfortable.
+
+What I'd like to do is establish two kinds of commands with two separate leader keys. A "Right leads" uses my current
+leader and starts and ends on the right side with the leader, a "Left leads" uses a different leader key and starts and
+ends on the left hand. The third kind of command would be a 'double key' command, like `<leftleader>ll` or
+`<rightleader>dd`, these need to be reserved for the most common commands, since they are by far the easiest to type so
+long as I ensure that the keys are on opposite sides of the keyboard.
+
+The goal is to have commands grouped mnemonically both by letter (i.e., the first letter of the command should be mapped
+consistently to some subfunction, so all my telescopes might be `<rightleader>t<something>` (where `<something>` might
+be several characters), and my Debugger commands file under `<rightleader>d<something>`. Ideally I _also_ sort command
+'kinds' by hand, so that, maybe, all the commands for altering editor state (e.g., opening files or whatever) are 'left
+hand' commands, and all the commands for inspecting the state of the object being edited (e.g., running tests, checking
+coverage, etc) are 'right hand', not sure how to break that up yet.
+
+This, however, will make it easier to remember commands and build up a little cheatsheet, at the moment I routinely have
+to poke through my code to figure out where it all lives.
+
+This should also make it a little easier to build up some library functions for this kind of thing. Something like:
+
+```nix
+{
+    rightleader = {
+        d = {
+            "o" = "lua require('dap-ui').toggle()";
+            "c" = "lua require('dap').continue()";
+            "n" = "lua require('dap').step_over()";
+            "i" = "lua require('dap').step_into()";
+            "o" = "lua require('dap').step_out()";
+            "d" = "lua require('dap').toggle_breakpoint()";
+        };
+        f = {
+            "f" = "Telescope find_files";
+            "b" = "Telescope buffers";
+            # ...
+        };
+    };
+    leftleader = {
+        e = {
+            x = {
+                modes = "nox";
+                action = "some action";
+            }
+        }
+        # snip
+    };
+}
+```
+
+If the value on the RHS of the assignment is a string, it's interpreted as the `action` with default mode and all that,
+if the value is an attrset, it must be the submodule specifying modes/actions/etc.
+
+by default, it will assume the command is for `nox` and that it's a normal mode command ended with `<CR>`. I can then
+build this object as a nix module, then use it to create the keymap and the cheatsheet. Each plugin can specify it's own
+keybindings locally, which get included conditionally with the plugin.
+
+
+# 27-OCT-2024
+
+## 1109
+
+Finished the passthrough setup for randy, next steps are to get BTG set up w/ the 2070 I have and to run cables from the
+rack to my office for HDMI and DP from BTG. Then I can use `looking-glass` and BTG for near-native performance on the
+VMs.
+
+Once these are done I'll look towards migrating `mirzakhani` into this model as well; and maybe move it down to the rack
+as a result. Then I'll have two hosts with plenty of GPU horsepower I can eventually MDev up.
+
+I haven't dug too deeply into the MDev side of things, but from the little I've read so far, I'm hoping I can have a
+setup which gangs up all these GPUs, less for the gaming side of things (if I have to pull one out of the gang to run
+whatever, so be it), but for the compute side it'll be important. A quick test with `hashcat` got me 13GHashes/s on the
+P40 alone. I can't get it to run on the 'CPU' on the VM, since it's a QEMU vCPU it doesn't see it as a 'real' CPU, but I
+suspect 13GHashes/s is going to translate to a pretty good rate of speed on Brocard. Assuming I get about the same in
+candidates-tested-per-second, it's 11Y of compute time, but I have good reason to believe it'll be faster (since MD5 is
+compartively more complicated than what I'm doing with brocard) and hopefully I can clear the 2e64 space somewhat more
+quickly without having to scale out too much.
