@@ -1,6 +1,6 @@
 #TODO: Rebuild this so much. It's a mess.
 
-@_deploy *ARGS: update
+@_deploy *ARGS:
   just _deploy-direct {{ARGS}}
 
 @_deploy-direct *ARGS:
@@ -35,9 +35,8 @@ deploy-no-update LOCATION CONFIG DOMAIN="canon" TASK="test":
 [group('deploy')]
 deploy-netboot MACHINE DOMAIN="canon":
   sudo nix run \
-    -j $PARALLEL \
+    -j ${PARALLEL:=4} \
     --impure --no-warn-dirty \
-    --log-format bar-with-logs \
     ".#build.\"{{DOMAIN}}\".{{MACHINE}}"
 
 

@@ -1135,3 +1135,117 @@ suspect 13GHashes/s is going to translate to a pretty good rate of speed on Broc
 candidates-tested-per-second, it's 11Y of compute time, but I have good reason to believe it'll be faster (since MD5 is
 compartively more complicated than what I'm doing with brocard) and hopefully I can clear the 2e64 space somewhat more
 quickly without having to scale out too much.
+
+
+# 27-NOV-2024
+
+## 1214
+
+I'm thinking I might move to an iSCSI-based approach for VMs for the near term.
+
+The netboot experiment has been cool, but it's finicky with total available space and also it's a really slow process to
+rebuild the images. I think I can get a lot of the same benefits (centralized storage, decoupled configuration, etc)
+with iSCSI and eventually some kind of overlay system.
+
+I'm going to build an iSCSI gold-image that can be cloned. It will have a baseline install of a recent NixOS, and will
+be periodically mounted and updated. When creating a new machine, I'll have scripts that:
+
+1. COW Clone this iSCSI base image
+2. Create a new RW iSCSI disk
+3. Configure these disks for the new machine.
+
+The machine would then mount the two disks in an overlay, booting form the base COW clone and then writing to the RW
+disk with any subsequent updates.
+
+Machines can be periodically recreated, and any dedicated data can be placed on an independent iSCSI, so the COW clone
+is just the common shared underlayment, the RW disk is for machine-specific config, and additional independent disks for
+application data.
+
+This will require a lot of automation around iSCSI creation, but for the immediate term I'll probably just make disks
+per machine and install that way, a hard clone of the base image should do it. I'll serve them out of Nancy and once
+it's working I can work on building a better iSCSI server.
+
+To that end, I think I'm targeting 100GBe Ethernet out of the gate, I considered other protocols, and they may be useful
+if I want to split out a backplane for data, but in the short term I'm going to keep it simple and have a single flat
+network on 100GBe between all physical components that support it (currently only 3 such machines, but I expect that I
+will have a few more in the future, so I'm aiming for something in the 16 port range on the switch).
+
+Ultimately the 100GBe switch will link over a pair of 10GBe links to Condorcet, and then the majority of 'normal'
+machines in the lab will still route through there, but the 100GBe backend will be used for the Racked machines to share
+data, the traffic is low enough that a flat network should be fine, and I do want to move to IPv6 eventually anyway, at
+which point the routing will be much simpler.
+
+I _may_ start-from-v6 on this project, and use it as a lever to excise v4 from my lab, but tbh I'm not sure it's worth
+it in the short term.
+
+All of this mess brought to you by frustrating issues with my prometheus server not mounting NFS the way I like. Hell of
+a lot easier when it just looks like a disk.
+
+## 1619
+
+I think I'm going to start by replacing some of the NFS-as-a-target stuff with iSCSI. NFS is really not the right tool
+for what I want, which is a pile of bits that the VM can read/write from on it's own. I can still netboot the machines
+but have all the data live in iSCSI volumes. I should be able to extend my existing network-storage code for this, and
+I'll have to manually recreate the luns, but I should be able to query the infra code to generate an appropriate list
+for Nancy at least, and then that list can eventually drive a proper iSCSI host.
+
+
+## 1940
+
+Okay, actual plan:
+
+1. [x] I'll create NixOS-24.11 as a LUN in my Synology (Nancy)
+2. [~] I'll mount this LUN on `pinky`, my lab VM, and install NixOS 24.11 on it.
+3. [ ] I'll then clone this LUN to a new LUN, PINKY-24.11-ROOT, and mount it on pinky as its new root disk
+4. [ ] I'll alter Pinky's configuration till it can boot from this iSCSI disk.
+
+After this, I can recreate the other VMs using this new system, the clones will be RW per machine and full copies (since
+COW doesn't seem straightforward here), but it'll get the system running and I can work on it from there.
+
+I'm a little ways into the plan above and I don't expect it'll take to long to get running.
+
+
+# 15-DEC-2024
+
+## 0037
+
+I've got things sorted I think. I have a spare 2070 I can use for DOP, I'll pull a bit of it's memory (half, 64GB) and
+put it in BTG. `randy` will stay there for doing GPU workloads and running `ollama` models and the like for selfhosted
+copilot. DOP will become my main dev machine again, with 64GB of memory and 2070 to run upstairs to my office. To
+simplify things I may get a SSD for DOP, that way I can just directly install nixos on the SSD. It abandons entirely my
+netbooting experiment, really, but I think it's probably the right move -- I can revisit netbooting in the future when I
+have a more stable environment with all my systems running what I need them to run.
+
+# 20-DEC-2024
+
+## 1249
+
+I went ahead and picked up a SSD for DOP to run it's OS off of, this should allow me to get moved _back_ over to DOP as
+a dev machine, randy will still be used as a dev box, but more for GPU workloads and the like until I get it tuned up.
+It'll probably be getting my test configs set against it as well, etc.
+
+I'm going to put the 2070 in DOP as well so there is some GPU horses there, but ultimately I do want to run both DOP and
+BTG as hypervisors running off iSCSI for boot. I think that gets me the best of both worlds in terms of keeping the
+disks separated from the machines that manage them, and sets me up for a move to a DIY SAN eventually.
+
+# 30-DEC-2024
+
+## 2249
+
+Working on setting a few things up in `glamdring`; in particualr I'm working on getting set up on a new terminal
+emulator, probably `ghostty`, though `kitty` remains in contention. In particular, I figured out (via `ghostty`) how to
+get kitty to work alright with `tmux` using the same (instructions)[https://ghostty.org/docs/help/terminfo] as
+`ghostty`. That solved the immediate issue with `kitty` everywhere, but I do like the defaults of `ghostty` better?
+
+In any case, the main motivation is getting image-in-terminal to work. `kitty` has the edge there right now, on account
+of it working correctly in a nested `neovim-with-image.nvim-in-kitty-mode in tmux in kitty` situation, which `ghostty`
+presently doesn't. I want to try the alternate backend for `image.nvim` to see if it works any better, but I know
+`kitty` already has some existing integration with `nix` anyway, so it may be the better choice.
+
+I also set up `stickybuf` and started working on `avante` integration with a local `ollama` hosted model; but I have
+some networking that needs doing there as well.
+
+Hoping I can drop my ChatGPT and Copilot subscriptions in favor of the self-hosted setup.
+
+I also switched over to `lix` after getting stung by [9708](https://github.com/NixOS/nix/issues/9708); I don't know if
+I'll stick with it, but it seems to be a drop in for now.
