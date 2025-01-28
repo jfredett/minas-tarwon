@@ -14,3 +14,7 @@ cloc *args:
 
 host-key PATH:
   ssh-keygen -f "{{PATH}}.ed25519.key" -N "" -t ed25519
+
+
+restart-service HOST SERVICE:
+  ssh "{{HOST}}" "sudo systemctl restart {{SERVICE}}"

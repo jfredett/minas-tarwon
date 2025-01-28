@@ -4,7 +4,7 @@
   description = "Minas Tarwon";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=9f99c0e05ef3b1f07181cd77b8b86ed3047b8d56";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -79,13 +79,14 @@
           #{ dotenv.enable = true; }
           { packages = with pkgs; [
             busybox
-            mani
-            git
-            just
-            git-filter-repo
             cloc
+            git
+            git-filter-repo
             ipmitool
+            just
+            mani
             nixfmt-rfc-style
+            openssl
           ]; }
         ];
       };
