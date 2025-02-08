@@ -87,6 +87,8 @@
             mani
             nixfmt-rfc-style
             openssl
+            plantuml
+            timg
           ]; }
         ];
       };
