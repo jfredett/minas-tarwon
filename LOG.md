@@ -1249,3 +1249,9 @@ Hoping I can drop my ChatGPT and Copilot subscriptions in favor of the self-host
 
 I also switched over to `lix` after getting stung by [9708](https://github.com/NixOS/nix/issues/9708); I don't know if
 I'll stick with it, but it seems to be a drop in for now.
+
+# 19-FEB-2025
+
+Nearly deleted a bunch of things, fortunately I had just commited everything off.
+
+Lemony snickets these last few weeks.
