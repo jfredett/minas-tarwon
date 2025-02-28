@@ -1255,3 +1255,35 @@ I'll stick with it, but it seems to be a drop in for now.
 Nearly deleted a bunch of things, fortunately I had just commited everything off.
 
 Lemony snickets these last few weeks.
+
+# 28-FEB-2025
+
+Some days, all you can manage is an update to a log.
+
+Dropped those AI subscriptions, I find that `qwen` on the local P40 is more than enough for my relatively limited LLM
+use. Not having `Copilot` adjacent autocomplete has been a little rough on the hands but ultimately isn't really costing
+time.
+
+I think my next project for the editor is probably to pare down the number of plugins, set up more autocomand/language
+specific configuration, and continue to improve the ergonomics a bit. I'd like to get all my keybindings centralized and
+documented as well, as right now they're pretty ad hoc from years of accrual.
+
+For the lab, I think the next projects include geting the k3s 'production' cluster up and running, and starting to
+helmify all my various service-level stuff. That gets me a good balance, more 'permanent' services can live as full vms
+in NixOS, then I can take my smaller services and use either OTS docker containers or DIY nix-based containers. K8s can
+handle distributing across multiple machines.
+
+Ideally I want to build in autoscaling/migration, so that my projects are run in a container on my 'main' development
+machine w/ remote storage backing them. In the evening when I finish working, I want those containers to migrate
+(without losing any internal state) to a single, low power machine, so that I can shut off all my other machines. Then
+in the morning I can have them automatically scale up a bit before I need them.
+
+The idea is that -- during peak hours of the day I want to have the full horsepower available, but once the family is
+asleep I don't need most of the services running at all. I should be able to turn off a good chunk of the infrastructure
+so that I'm only using it when I'm generating the maximum from my solar roof. Combined with a off-grid battery system
+and I think it should be possible to get all the horsepower I want out of the 730s as compile-farm machines, while more
+or less not using any grid-power for them.
+
+Dare to dream.
+
+Anyway, it's a rough day here, hopefully it's better for you.
