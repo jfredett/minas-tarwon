@@ -32,7 +32,6 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         hyprland.follows = "hyprland";
-        stylix.follows = "stylix";
       };
     };
 
@@ -48,11 +47,9 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         hyprland.follows = "hyprland";
-        stylix.follows = "stylix";
       };
     };
 
-    stylix.url = "github:danth/stylix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
 
     telperion = {
