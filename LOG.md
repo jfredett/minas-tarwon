@@ -1287,3 +1287,32 @@ or less not using any grid-power for them.
 Dare to dream.
 
 Anyway, it's a rough day here, hopefully it's better for you.
+
+# 30-APR-2025
+
+## 0051
+
+I'ven't made any progress on the above, and have justified what may otherwise be described as laziness as an impromptu
+experiment in seeing how long it takes bitrot or force majeure to break something; turns out the latter won. Some work
+on the powerlines down the street yeilded a brownout, which tripped my NAS into a strange state which required some
+effort to recover. This left the netboot image mounts in a state of corruption, it appears, and my main VM host also
+felt the sting, leading to a situation where all my VMs aren't available.
+
+This was at least somewhat expected, partly because even though I have a rackmount UPS for the servers I haven't
+installed it because it requires also installing some electrical and I simply haven't had the gumption. In any case, the
+unfortunate situation is that the netboot apparatus to generate _new_ images is _also_ broken, so I need to either fix
+what's there or convert to something new, neither of which are super exciting, but at least the latter means I'll have
+some time to play with iSCSI, which appeals to me as a potentially interesting alternative to the `NFS` route I had
+planned. There is also `tvix` to consider.
+
+At the moment, the state is that BTG and DOP both can't boot up; but everything else is running alright. Rewriting the
+netboot to avoid the image size issue will also make netboot-everything viable again, which will be nice for automating
+VM creation, which in turn should make moving services to k8s much simpler.
+
+## 1238
+
+What was originally a small issue has grown. In attempting to untangle things, I needed to get my laptop, Archimedes,
+updated and working, however he is now crashing on _update_, which is a new thing for me in Nix world. I think he might
+just need a bit of cleaning, but I'm getting all my stuff committed and pushed before continuing.
+
+The fun never really stops.
