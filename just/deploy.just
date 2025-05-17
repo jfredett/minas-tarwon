@@ -1,20 +1,20 @@
 #TODO: Rebuild this so much. It's a mess.
 
 @_deploy *ARGS:
-    just _deploy-direct {{ARGS}}
+    sudo just _deploy-direct {{ARGS}}
 
 @_deploy-direct *ARGS:
-    nixos-rebuild -j $PARALLEL --impure --upgrade {{ARGS}}
+    nixos-rebuild -j ${PARALLEL:=1} --impure --upgrade {{ARGS}}
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{MACHINE}} via it's canonical domain name
 [group('deploy')]
-deploy MACHINE DOMAIN="canon" TASK="test":
-    just deploy-to "{{MACHINE}}.{{DOMAIN}}" {{MACHINE}} {{DOMAIN}} {{TASK}} 
+deploy MACHINE DOMAIN="canon" TASK="test" *ARGS:
+    just deploy-to "{{MACHINE}}.{{DOMAIN}}" {{MACHINE}} {{DOMAIN}} {{TASK}} {{ARGS}}
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the local machine using the given {{CONFIG}}
 [group('deploy')]
 deploy-local CONFIG TASK="test":
-    sudo just _deploy "--flake .#\"{{CONFIG}}.canon\" {{TASK}}"
+    just _deploy "--flake .#\"{{CONFIG}}.canon\" {{TASK}}"
 
 # Equivalent to `nixos-rebuild {{TASK}}` on the local machine using the machines hostname as the target
 [group('deploy')]
@@ -29,14 +29,14 @@ deploy-to LOCATION CONFIG DOMAIN="canon" TASK="test":
 # Equivalent to deploy-to, but skips the update
 [group('deploy')]
 deploy-no-update LOCATION CONFIG DOMAIN="canon" TASK="test":
-    just _deploy-direct "--use-remote-sudo --target-host {{LOCATION}} --flake .#"{{CONFIG}}.{{DOMAIN}}" {{TASK}}"
+    just _deploy-direct "--target-host {{LOCATION}} --flake .#"{{CONFIG}}.{{DOMAIN}}" {{TASK}}"
 
 # Create and place a netbootable image in the netboot for the MACHINE specified in the DOMAIN defined in telperion
 [group('deploy')]
 deploy-netboot MACHINE DOMAIN="canon":
     #!/usr/bin/env bash
 
-    sudo nix run \
+    nix run \
         -j ${PARALLEL:=4} \
         --impure --no-warn-dirty \
         ".#build.\"{{DOMAIN}}\".{{MACHINE}}"

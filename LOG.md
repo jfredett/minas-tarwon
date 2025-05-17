@@ -1316,3 +1316,23 @@ updated and working, however he is now crashing on _update_, which is a new thin
 just need a bit of cleaning, but I'm getting all my stuff committed and pushed before continuing.
 
 The fun never really stops.
+
+# 17-MAY-2025
+
+## 1141
+
+It's all fixed, basically.
+
+I switched to a proper SSD based install on BTG by swapping the Optical Drive for an SSD. I have a UEFI based install
+there because initially I was planning to just EFI bounce via `rEFInd`, but it turned out not to be necessary.
+
+Now I need to get DOP set up the same way, get the GPU installed there as well, and then get to work bringning up a k3s
+cluster up and running.
+
+This also meant I removed the netbooting infrastructure from the VMs as well, which means I need to convert the other
+services over to a proper install based system, or have everything like, boot to refind, which is what `barge` is doing
+right now.
+
+I think I'll probably just start with three VMs on the same host with a single worker, that should be enough to get
+everything set up, I can migrate services over, and then I can work on migrating to a more resilient distribution of
+workers and leaders.
