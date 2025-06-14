@@ -1336,3 +1336,77 @@ right now.
 I think I'll probably just start with three VMs on the same host with a single worker, that should be enough to get
 everything set up, I can migrate services over, and then I can work on migrating to a more resilient distribution of
 workers and leaders.
+
+# 18-MAY-2025
+
+## 1140
+
+I swear I didn't plan to start this 23h59m after the last one, I just got distracted and managed to land on it.
+
+So -- doing a bit of reading, I think I should be able to start by standing up 3 copies of `odysseus` (mod a rename) and
+get something wired together, from there I can just run an 'all-leader' cluster and probably do just fine. Eventually
+I'll spread those managers to `toto`, `maiasaura`, and the other small machines I have scattered, and just run workers
+on BTG, DOP, and Nancy (if I decide to rebuild her as a nixos machine, anyway, I don't plan to fight it if setting up a
+k3s worker there is hard; maybe synology has a package for it but w/e). I can definitely use the iscsi/nfs storage
+drivers at least, but it'd be cool to run some work directly on the nancy machine where it will be colocated w/ the data
+it needs and could ostensibly use local-file storage drivers.
+
+One issue I need to work out not that I'm not going to netboot things is how to build whole a new VM quickly and ideally
+without too much manual work. Right now the process is:
+
+1. Create a disk in BTG's config
+2. Create a VM definition that mounts that disk, sets cpu/mem/etc params
+3. Attach the install ISO in that VM def as boot order 1
+4. Deploy BTG (sometimes provoking a network failure because of the weird bonding situation I have set up)
+5. SSH to the new VM on whatever address it grabbed from DHCP, install a base that includes my user, basic nix config,
+etc.
+6. After install is done, down the machine, update the vm definition to not boot the install iso
+7. Update BTG again with the new def.
+8. Boot the new VM
+9. Apply it's final config via the `boot` option
+10. Reboot the machine to it's final config.
+
+
+This is quite tedious, and also relies on having the data stored right on disk on BTG, no option for offering disks from
+a remote source (e.g., iSCSI). It also involves a deploy to either BTG (#4, 7) or the VM (#5, 9) a total of four times.
+
+I can solve some of this with UEFI bouncing, I think, I can build the whole image as a UEFI partitioned image and then
+EFI bounce like I am with Barge. This costs at boot time, but only a little, and it cuts out several steps.
+
+Even better, I think `nixos-generators` will basically do this for me.
+
+Next, if I can get iSCSI cooking, then I can build this into a remote-root/local-scratch setup, where there is a iSCSI
+based root system that is fairly minimal, and then overlay a local disk (or another iSCSI) as an overlayfs which will
+get subsequent updates to that machine. I think the procedure would then just be:
+
+1. Build a nix definition for a specific VM
+2. Build a UEFI-bootable image to an iSCSI target
+    - In this mode, the image should not try to boot a second overlay drive from the next step
+3. Create a second iSCSI target drive
+4. Build a libvirt definition that mounts both the #2 image and the #3 disk as an overlay
+5. Update BTG to run the new VM.
+
+This still requires running an update against the whole hypervisor, but it's a hell of a lot simpler than my current
+methodology. I can start by building up a `pinky` image with this model, hosting the iSCSI on Nancy as I already have
+some test disks set up over there.
+
+Another option is to use nixosgenerators and drop the whole VM image as a qemu image. This may be much easier but does
+mean rsyncing around the VM image.
+
+Practically it would also mean I'd want to probably tag images with some relevant sha of the repo they were built from,
+not sure how I want to do that yet though. This could also still use the above EFI bounce approach, every vm definition
+would just load rEFInd and point to the underlying thing. There is an option to install a bootloader as well, or
+netboot, so worth exploring on pinky for sure I think.
+
+# 14-JUN-2025
+
+## 1609
+
+I did some refactoring and ended up with 3 identical VMs for the k3s cluster, all running on BTG right now, but once
+I've got it working I can migrate to multiple machines. I'm still using the current VM model, I plan to test the
+build-a-vm-directly on DOP for ease, and then figure out how to share it everywhere after the fact.
+
+Next step is to stand up the k3s cluster and do any adjustments to horsepower needed. Then I can migrate services over
+to be managed by some helm charts and glue.
+
+That should let me retire barge, and I should be able to retire daktylos as well.
