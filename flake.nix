@@ -32,7 +32,7 @@
     };
 
     glamdring = {
-      url = "git+file:./glamdring?ref=main";
+      url = "git+file:./glamdring";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         hyprland.follows = "hyprland";
@@ -82,11 +82,11 @@
             cloc
             git
             git-filter-repo
-            kubernetes-helm
             ipmitool
             just
-            kubectl
             k9s
+            kubectl
+            kubernetes-helm
             mani
             nixfmt-rfc-style
             openssl
@@ -94,59 +94,6 @@
             timg
           ];
         };
-
-        # FIXME: Port this, netboot is borken anyway.
-
-        #apps = let
-        #  netboot_dir = "/mnt/emerald_city_netboot";
-        #  tmpdir = "/storage/minas-tarwon";
-        #  mkScript = name: script: flake-utils.lib.mkApp {
-        #    drv = pkgs.writeScriptBin name script;
-        #  };
-        #  mkBuildScriptFor = domain: machine: configuration: let
-        #    config = configuration.config;
-        #  in if builtins.hasAttr "mac" config.laurelin.netboot then (mkScript machine /*bash*/ ''
-        #    set -e
-
-        #    mac=$(echo "${config.laurelin.netboot.mac}" | tr -d :)
-        #    target_dir=${netboot_dir}/$mac
-        #    tmpdir=${tmpdir}/${machine}
-
-        #    echo "Preparing necessary directories"
-        #    mkdir -p $target_dir
-
-        #    echo "Build ${machine} image"
-        #    nix build --impure \
-        #      --log-format bar-with-logs \
-        #      --out-link $tmpdir \
-        #      ".#nixosConfigurations.\"${machine}.${domain}\".config.system.build.netboot"
-
-        #    # Shuffle images only if previous command succeeds -- `set -e` ensures this won't run
-        #    # unless that's true.
-        #    if [ -e $target_dir/latest ]; then
-        #      echo "Shuffling ${machine} images"
-        #      latest_creation_time=$(stat -c %Z "$target_dir/latest")
-        #      timestamp=$(date -d "@$latest_creation_time" +"%d-%b-%Y-%H%MET")
-        #      mv $target_dir/latest $target_dir/$timestamp
-        #    fi
-
-        #    echo "Copy ${machine} image to mount"
-        #    rsync -r --copy-links --info=progress2 --info=name0 -a $tmpdir/ $target_dir/latest
-
-        #    echo "Clean up"
-        #    rm -rf $tmpdir
-        #    '') else (mkScript machine /* bash */ '' echo "Does not netboot" '');
-        #  mkBuildables = domain: builtins.mapAttrs (mkBuildScriptFor domain) telperion.nixosConfigTree."${domain}";
-        #in if (system == "x86_64-linux") then {
-        #  # BUG: This seems to break `nix flake show`
-        #  #canon = mkBuildables "canon";
-        #  build = {
-        #    canon = mkBuildables "canon";
-        #    "emerald.city" = mkBuildables "emerald.city";
-        #  };
-        #} else { };
-
-
       };
     };
 }
