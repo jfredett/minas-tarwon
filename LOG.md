@@ -1410,3 +1410,20 @@ Next step is to stand up the k3s cluster and do any adjustments to horsepower ne
 to be managed by some helm charts and glue.
 
 That should let me retire barge, and I should be able to retire daktylos as well.
+
+
+# 19-JUN-2025
+
+## 1814
+
+Got `affine` set up on `barge`, began to look into reconfiguring my cloudflare tunnel to point into barge, probably
+easiest to expose it on the host itself, and then configure it in nixos.
+
+I still want to migrate all this stuff to k8s, as well, but for the moment it's just simpler to drop it all here. I need
+to get foundry stood up there as well, which I suspect will be comparatively simpler.
+
+I'm going to extend the container definition to accept an arbitrary RP domain, since the incoming traffic over the
+tunnel should only go to a few services. Would prefer k8s namespacing, but the plan is to turn the thing off/allowlist
+IPs, so should be alright.
+
+Overall, things are proceeding apace.
