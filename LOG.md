@@ -1427,3 +1427,98 @@ tunnel should only go to a few services. Would prefer k8s namespacing, but the p
 IPs, so should be alright.
 
 Overall, things are proceeding apace.
+
+# 7-JUL-2025
+
+## 2131
+
+I'm planning to move minas-tarwon & co to `dragon`, which should improve average build times. Archi is going to be an AV
+machine after that, to help support some efforts for `infinite-dungeon`, which has driven most of the recent changes
+here and occupies a good portion of my time.
+
+I'm also working on setting up the k3s environment on `ody`&co, the intent is that my various RPis and SFF machines will
+be dragooned into helping with the workloads eventually, but building out the modules in `laurelin` will be easier with
+some VMs that are easy to blow away and reset.
+
+# 8-JUL-2025
+
+## 1045
+
+Got ody-01 fixed, needed to fully delete the k3s stuff by following:
+[this](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/cluster/k3s/docs/CLUSTER_UPKEEP.md) doc
+to clear everything; this is likely down to the way I built the machines having a pile of crap left on them.
+
+I'm going to build a 'mode' option into the service that will add an option to set the service to 'clean' mode which
+should rip out all the relevant stuff -- or maybe just a script, idk.
+
+Next step is to get helm setup.
+
+# 9-JUL-2025
+
+## 0044
+
+I'm making a distinction -- most of what I want to run on the k3s cluster is going to be 'ephemeral', in the sense that
+I don't necessarily know what I want to run and am going to iterate on it reasonably quickly, and don't want to have to
+version it against the _server's_ configuration. However, some items are required-on-first-run, e.g., setting up storage
+drivers, GPU passthrough where it's appropriate, etc.
+
+I'm writing my own charts mostly for the practice for all the ephemeral stuff, but for the more 'structural' stuff, that
+will be encoded into the module itself.
+
+NFS and Longhorn both should get set up, nfs should be easy to get running with nancy which will unblock my foundry
+chart progress.
+
+# 12-JUL-2025
+
+## 1456
+
+I set up a vault auto-chart, and will set up a vault-operator autochart, but I need to figure out how I'm storing all my
+helm charts first, I don't like where they live now (in telperion south of the emerald.city VM folder), since they
+should be relatively agnostic.
+
+I could store them in laurelin, but they aren't going to be nix files so they are a little out of place. 
+
+I could store them in a new repo, and tbh that's where I'm leaning, but it means if I need a secrets-repo for it I've
+added another narya, which I'd like to keep to a minimum.
+
+I think they're probably going to get split into their own repo, my plan is to largely have the `k3s` module in laurelin
+set up the initial state that the repo would expect, and then the repo will contain an 'initialize' script that runs
+through all the bootstrapping, and the rest will just be 'normal' helm-files with a parent 'install/upgrade' script.
+
+Eventually I suspect I'll build an operator for all my stuff, but today is not that day.
+
+An alternative would be to have some of the bootstrap script contained in the module itself, since I'm going to have it
+minimally be able to set up:
+
+1. Vault
+2. Cert-manager
+3. NFS
+4. Longhorn
+
+Then it could drop a bunch of systemd oneshots that depend on a parent job that does the initial install
+semi-automatically. You'd deploy a single node in 'server' mode, log in, run the script via `systemctl start
+emerald-city-k8s-install` or whatever, then it'd spit back the secret you need for all the other client machines.
+
+The other chart repo would then just contain install files for the services on top of the substrate.
+
+Right now I'm also using an 'out of band' docker registry, so it'd probably be good to add an option to run said
+registry and automatically generate the relevant trust files; the true ideal would be to run it _within k8s_ and have it
+loop back, though I suspect that might be not recommended, because cool things rarely are.
+
+
+# 13-JUL-2025
+
+## 1048
+
+I split off `earendil` for housing helm charts, it presently has nothing in it. I'll store instructions on setup there
+as well.
+
+# 16-JUL-2025
+
+## 1205
+
+Trying to use IngressRoute for routing, right now have some draft in `earendil` that should move back to laurelin since
+it's the ingress for vault; which is laurelin managed, for the moment though it's handy to keep all the k8s stuff in one
+spot. I might wrap it in nix so I can import it via flake.
+
+For the moment I can just leave it in place to work out how that automation will be wired up

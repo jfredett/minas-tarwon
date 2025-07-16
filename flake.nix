@@ -86,11 +86,13 @@
             just
             k9s
             kubectl
+            operator-sdk
             kubernetes-helm
             mani
             nixfmt-rfc-style
             openssl
             plantuml
+            postgresql
             timg
           ];
         };

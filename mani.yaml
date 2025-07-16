@@ -52,3 +52,12 @@ projects:
     sync: true
     remote:
       origin: git@github.oz:jfredett/turnkey.git
+
+  earendil:
+    path: earendil
+    url: git@github.oz:jfredett/earendil.git
+    desc: helm charts
+    tags: [helm, operations]
+    sync: true
+    remote:
+      origin: git@github.oz:jfredett/earendil.git
