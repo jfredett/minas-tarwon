@@ -1201,11 +1201,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1752603129,
-        "narHash": "sha256-S+wmHhwNQ5Ru689L2Gu8n1OD6s9eU9n9mD827JNR+kw=",
+        "lastModified": 1752767945,
+        "narHash": "sha256-C7l88gwS48gjLxGqsJvQkVvvi7e99CdsdEVKiZTKEj8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "e8c19a3cec2814c754f031ab3ae7316b64da085b",
+        "rev": "460f1e9af95b081fb7e2022485b6c22b92085936",
         "type": "github"
       },
       "original": {
@@ -1359,11 +1359,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1752673871,
-        "narHash": "sha256-Dma6pwsxdd6MHi0hp9y6QFm/6V1/p+zI6ED+pijE3LQ=",
+        "lastModified": 1752770231,
+        "narHash": "sha256-/egjhnbr7iuu/hHreYeDFypX3+coT/2jj/N3kO8sSvM=",
         "ref": "refs/heads/main",
-        "rev": "5349667992f5047be0c607468e8c0d74a5e7e00c",
-        "revCount": 6280,
+        "rev": "75c0675e14655d7a859f184009360bd264806123",
+        "revCount": 6284,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -1859,7 +1859,7 @@
         "dirtyRev": "0356f2d3bb3a8e5c213305c198ed24cdc6d47da1-dirty",
         "dirtyShortRev": "0356f2d-dirty",
         "lastModified": 1752417383,
-        "narHash": "sha256-y6qKCb0G73W0vdEF8Bj0CfdnmJCMH7LTAMksx5lA05o=",
+        "narHash": "sha256-90pk+MmnPn1s12QHAvTtKtB9LG3xxERLegydiHzjPu0=",
         "type": "git",
         "url": "file:./laurelin"
       },
@@ -2529,11 +2529,11 @@
         "nixpkgs": "nixpkgs_16"
       },
       "locked": {
-        "lastModified": 1752674526,
-        "narHash": "sha256-ugaC8PmkW4n/+Yo2uiZRr1KjhiOLQY9LuFAGDiu4iyQ=",
+        "lastModified": 1752764131,
+        "narHash": "sha256-ICuzcl6k4/zxjsXjMm+CIDHroLSuVPYEWAZvjMsZtbg=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "d5a9b359bab42d66886e2f783536d061de17092a",
+        "rev": "a354aa8bcab5191c01acba64b4fdc81ede297757",
         "type": "github"
       },
       "original": {
@@ -2868,10 +2868,11 @@
         "nur": "nur_4"
       },
       "locked": {
-        "dirtyRev": "a850e39dcd45026330d7073d76262e944157fd44-dirty",
-        "dirtyShortRev": "a850e39-dirty",
-        "lastModified": 1752417343,
+        "lastModified": 1752762786,
         "narHash": "sha256-Wq1Z9mEeE7vWJ+TlZCN40xuQqmQN2bxuKnTJYqHNY98=",
+        "ref": "refs/heads/main",
+        "rev": "2cf3eee985bc341e9cdf9aa27e4504af6ed8b47c",
+        "revCount": 115,
         "type": "git",
         "url": "file:./telperion"
       },

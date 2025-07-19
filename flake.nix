@@ -73,11 +73,16 @@
       };
 
       perSystem = { pkgs, system, ...}: let
+        pkgs-unfree = import nixpkgs { inherit system; config.allowUnfree = true; };
       in {
         devshells.default = {
           motd = ''A Tower of Stone in a Field somewhere, Hitharwasar.'';
 
-          packages = with pkgs; [
+          env = [
+            { name = "VAULT_ADDR"; value = "https://vault.emerald.city"; }
+          ];
+
+          packages = with pkgs-unfree; [
             busybox
             cloc
             git
@@ -86,13 +91,15 @@
             just
             k9s
             kubectl
-            operator-sdk
             kubernetes-helm
             mani
             nixfmt-rfc-style
             openssl
+            operator-sdk
             plantuml
             postgresql
+            terraform
+            vault
             timg
           ];
         };
