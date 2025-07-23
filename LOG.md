@@ -1522,3 +1522,20 @@ it's the ingress for vault; which is laurelin managed, for the moment though it'
 spot. I might wrap it in nix so I can import it via flake.
 
 For the moment I can just leave it in place to work out how that automation will be wired up
+
+# 23-JUL-2025
+
+## 1305
+
+I'm thinking I might want to actually pull all the helm stuff into terraform in `earendil` -- right now I'm using k3s,
+but I'd prefer the actual install to be agnostic with respect to k8s host. Instead the k3s install would be barebones,
+and just focus on the necessaries to get k3s up and clustered.
+
+Terraform would drive helm, standing up the infrastructure and configuring, e.g., vault and such as well. This would
+make it easier to bootstrap vault, as well, and would clarify `earendil` as all the 'service' level automation, and the
+rest of `minas-tarwon` for the 'infrastructure' level automation.
+
+## 1405
+
+Started to move things, need to stop and think through how to organize it. I could have a single helm chart with
+subcharts, or move the dependencies up into terraform, not sure how I want to run it just yet.
