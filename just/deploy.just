@@ -24,7 +24,7 @@ deploy-self TASK="test":
 # Equivalent to `nixos-rebuild {{TASK}}` on the machine specified by {{LOCATION}} (IP or DN), applying the given {{CONFIG}}
 [group('deploy')]
 deploy-to LOCATION CONFIG DOMAIN="canon" TASK="test":
-    just _deploy-direct "--use-remote-sudo --target-host {{LOCATION}} --flake .#"{{CONFIG}}.{{DOMAIN}}" {{TASK}}"
+    just _deploy-direct "--sudo --target-host {{LOCATION}} --flake .#"{{CONFIG}}.{{DOMAIN}}" {{TASK}}"
 
 # Equivalent to deploy-to, but skips the update
 [group('deploy')]
