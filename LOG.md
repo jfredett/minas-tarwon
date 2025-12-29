@@ -1539,3 +1539,17 @@ rest of `minas-tarwon` for the 'infrastructure' level automation.
 
 Started to move things, need to stop and think through how to organize it. I could have a single helm chart with
 subcharts, or move the dependencies up into terraform, not sure how I want to run it just yet.
+
+# 29-DEC-2025
+
+## 1709
+
+Merged a pile of stuff into glamdring, using `edgy` to get some sidebars in place and make better use of the ultrawide.
+The `log` section is pretty crap at the moment but I'm hoping I can eventually get it to scroll through and show all the
+content that would otherwise be displayed via `:Notifications` in a buffer that auto-refreshes (a la VSCode's version of
+same).
+
+I also set up `lean4` support (in principle) and stubbed in `modelica` support. These will be for general use and
+specific use, respectively; `lean` just looks like a good tool to learn, and `modelica` is going to factor into
+`truncheon` in short order.
+
